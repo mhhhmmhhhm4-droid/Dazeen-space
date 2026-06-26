@@ -454,5 +454,55 @@ input:focus, textarea:focus {
             }
         }
     </script>
+    <script>
+    // دالة فتح وغلق السايدبار التفاعلية (3 خطوط)
+    function toggleSidebar(event) {
+        event.stopPropagation(); 
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('open');
+        document.body.classList.toggle('sidebar-active');
+    }
+
+    // إغلاق السايدبار تلقائياً عند الضغط في أي مكان خارجها
+    window.addEventListener('click', function(event) {
+        const sidebar = document.getElementById('sidebar');
+        const menuToggle = document.getElementById('menuToggle');
+        
+        if (sidebar.classList.contains('open') && !sidebar.contains(event.target) && !menuToggle.contains(event.target)) {
+            sidebar.classList.remove('open');
+            document.body.classList.remove('sidebar-active');
+        }
+    });
+
+    // دالة إرسال الطلب (تأكدي أن المسار نسبي للموقع أونلاين)
+    function submitOrder(event) {
+        event.preventDefault(); 
+        
+        const orderData = {
+            userId: localStorage.getItem('userId'),
+            productLink: document.getElementById('productLink').value,
+            quantity: document.getElementById('productQty').value,
+            color: document.getElementById('productColor').value,
+            size: document.getElementById('productSize').value,
+            notes: document.getElementById('productNotes').value
+        };
+
+        fetch('/api/orders/new', { // مسار نسبي نظيف بدون localhost
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderData)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                alert('تم تسجيل الطلب بنجاح.');
+                window.location.href = 'my-orders.html'; 
+            } else {
+                alert('فشل في إضافة الطلب.');
+            }
+        })
+        .catch(err => console.error('Error:', err));
+    }
+</script>
 </body>
 </html>
