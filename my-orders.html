@@ -332,11 +332,6 @@ body {
 
     <script>
         const userId = localStorage.getItem('userId');
-
-        if (!userId) {
-            alert("الرجاء تسجيل الدخول أولاً");
-            window.location.href = 'login.html';
-        } else {
             // جلب الطلبات الخاصة بالمستخدم
             fetch(`/api/orders/user/${userId}`)
                 .then(res => res.json())
