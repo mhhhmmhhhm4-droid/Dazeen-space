@@ -455,24 +455,20 @@ input:focus, textarea:focus {
                 notes: document.getElementById('productNotes').value
             };
 
-            fetch('/api/orders/new', { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(orderData)
-            })
-            .then(res => res.json())
-            .then(data => {
-                if(data.success) {
-                    alert('تم تسجيل الطلب بنجاح.');
-                    window.location.href = 'my-orders.html'; 
-                } else {
-                    alert('فشل في إضافة الطلب.');
-                }
-            })
-            .catch(err => {
-                console.error('Error:', err);
-                alert('حدث خطأ أثناء الاتصال بالسيرفر.');
-            });
+fetch('https://dazeen-space.online/api/orders/new', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        userId: localStorage.getItem('userId'), // تأكدي من كتابتها الصحيحة هنا أيضاً
+        productLink: document.getElementById('productLink').value, // أو حسب الـ IDs لديكِ
+        size: document.getElementById('size').value,
+        color: document.getElementById('color').value,
+        quantity: document.getElementById('quantity').value
+    })
+})            
+            
         }
 
         function logout() {
