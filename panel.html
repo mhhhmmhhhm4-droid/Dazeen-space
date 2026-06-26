@@ -322,7 +322,7 @@ input:focus, textarea:focus {
             </div>
             
             <nav class="sidebar-menu">
-                <a href="dashboard.html" class="menu-item active">
+                <a href="panel.html" class="menu-item active">
                     <i class="fas fa-plus-circle"></i>
                     <span>إضافة طلب جديد</span>
                 </a>
@@ -424,28 +424,54 @@ input:focus, textarea:focus {
     <script>
         // دالة فتح وغلق السايدبار التفاعلية (3 خطوط)
         function toggleSidebar(event) {
-            event.stopPropagation(); // منع انتقال الحدث لـ window لكي لا يتم الغلق فوراً
+            event.stopPropagation(); 
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('open');
             document.body.classList.toggle('sidebar-active');
         }
 
-        // إغلاق السايدبار تلقائياً عند الضغط في أي مكان خارجها بالشاشات الصغيرة
+        // إغلاق السايدبار تلقائياً عند الضغط في أي مكان خارجها
         window.addEventListener('click', function(event) {
             const sidebar = document.getElementById('sidebar');
             const menuToggle = document.getElementById('menuToggle');
             
-            // التحقق من أن الضغطة خارج السايدبار وخارج زر الـ 3 خطوط
             if (sidebar.classList.contains('open') && !sidebar.contains(event.target) && !menuToggle.contains(event.target)) {
                 sidebar.classList.remove('open');
                 document.body.classList.remove('sidebar-active');
             }
         });
 
+        // دالة إرسال الطلب للمسار النسبي في السيرفر
         function submitOrder(event) {
             event.preventDefault(); 
-            alert('تم تسجيل الطلب بنجاح.');
-            window.location.href = 'my-orders.html'; 
+            
+            const orderData = {
+                userId: localStorage.getItem('userId'),
+                productLink: document.getElementById('productLink').value,
+                quantity: document.getElementById('productQty').value,
+                color: document.getElementById('productColor').value,
+                size: document.getElementById('productSize').value,
+                notes: document.getElementById('productNotes').value
+            };
+
+            fetch('/api/orders/new', { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    alert('تم تسجيل الطلب بنجاح.');
+                    window.location.href = 'my-orders.html'; 
+                } else {
+                    alert('فشل في إضافة الطلب.');
+                }
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                alert('حدث خطأ أثناء الاتصال بالسيرفر.');
+            });
         }
 
         function logout() {
@@ -454,55 +480,5 @@ input:focus, textarea:focus {
             }
         }
     </script>
-    <script>
-    // دالة فتح وغلق السايدبار التفاعلية (3 خطوط)
-    function toggleSidebar(event) {
-        event.stopPropagation(); 
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('open');
-        document.body.classList.toggle('sidebar-active');
-    }
-
-    // إغلاق السايدبار تلقائياً عند الضغط في أي مكان خارجها
-    window.addEventListener('click', function(event) {
-        const sidebar = document.getElementById('sidebar');
-        const menuToggle = document.getElementById('menuToggle');
-        
-        if (sidebar.classList.contains('open') && !sidebar.contains(event.target) && !menuToggle.contains(event.target)) {
-            sidebar.classList.remove('open');
-            document.body.classList.remove('sidebar-active');
-        }
-    });
-
-    // دالة إرسال الطلب (تأكدي أن المسار نسبي للموقع أونلاين)
-    function submitOrder(event) {
-        event.preventDefault(); 
-        
-        const orderData = {
-            userId: localStorage.getItem('userId'),
-            productLink: document.getElementById('productLink').value,
-            quantity: document.getElementById('productQty').value,
-            color: document.getElementById('productColor').value,
-            size: document.getElementById('productSize').value,
-            notes: document.getElementById('productNotes').value
-        };
-
-        fetch('/api/orders/new', { // مسار نسبي نظيف بدون localhost
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(orderData)
-        })
-        .then(res => res.json())
-        .then(data => {
-            if(data.success) {
-                alert('تم تسجيل الطلب بنجاح.');
-                window.location.href = 'my-orders.html'; 
-            } else {
-                alert('فشل في إضافة الطلب.');
-            }
-        })
-        .catch(err => console.error('Error:', err));
-    }
-</script>
 </body>
 </html>
