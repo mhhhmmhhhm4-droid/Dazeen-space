@@ -32,7 +32,7 @@ body {
     position: fixed;
     top: 20px;
     right: 20px;
-    background-color: #ff3344; /* لمسة باللون الأحمر الفاتن */
+    background-color: #a855f7; /* متناسق مع لون المنصة البنفسجي */
     color: white;
     border: none;
     padding: 12px 15px;
@@ -40,19 +40,19 @@ body {
     cursor: pointer;
     font-size: 18px;
     z-index: 100;
-    box-shadow: 0 4px 15px rgba(255, 51, 68, 0.3);
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
     transition: all 0.2s ease;
 }
 
 .menu-toggle-btn:hover {
-    background-color: #e62233;
+    background-color: #9333ea;
     transform: scale(1.05);
 }
 
 /* --- تصميم القائمة الجانبية (Sidebar البنفسجي والمنظم) --- */
 .sidebar {
     width: 260px;
-    background-color: rgba(18, 7, 33, 0.85);
+    background-color: rgba(18, 7, 33, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-left: 1px solid rgba(255, 255, 255, 0.08);
@@ -63,7 +63,7 @@ body {
     height: 100vh;
     right: -260px; /* مخفي تلقائياً في الشاشات الصغيرة ويظهر عند الضغط */
     top: 0;
-    z-index: 90;
+    z-index: 95;
     transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -140,6 +140,13 @@ body {
     padding: 40px 30px;
     padding-top: 90px; /* مسافة لكي لا يختفي المحتوى تحت زر الـ 3 خطوط */
     width: 100%;
+    transition: filter 0.3s ease;
+}
+
+/* تأثير تباين خفيف للمحتوى عند فتح السايدبار في الهواتف */
+body.sidebar-active .main-content {
+    filter: brightness(0.6);
+    pointer-events: none; /* يمنع الضغط على الفورم أثناء فتح القائمة */
 }
 
 .content-header {
@@ -151,6 +158,7 @@ body {
 .user-welcome {
     font-size: 16px;
     color: #e2def0;
+    padding-right: 50px; /* إزاحة تمنع التداخل مع زر الـ 3 خطوط */
 }
 
 .section-title-box h2 {
@@ -289,6 +297,13 @@ input:focus, textarea:focus {
     .menu-toggle-btn {
         display: none; /* إخفاء زر الـ 3 خطوط على الكمبيوتر لأنه ليس بحاجة له */
     }
+    body.sidebar-active .main-content {
+        filter: none;
+        pointer-events: auto;
+    }
+    .user-welcome {
+        padding-right: 0;
+    }
 }</style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -296,7 +311,7 @@ input:focus, textarea:focus {
 
     <div class="dashboard-wrapper">
         
-        <button class="menu-toggle-btn" id="menuToggle" onclick="toggleSidebar()">
+        <button class="menu-toggle-btn" id="menuToggle" onclick="toggleSidebar(event)">
             <i class="fas fa-bars"></i>
         </button>
 
@@ -307,25 +322,21 @@ input:focus, textarea:focus {
             </div>
             
             <nav class="sidebar-menu">
-                <!-- هذا الملف يمثل إضافة طلب، لذلك يبقى هو الـ active -->
                 <a href="dashboard.html" class="menu-item active">
                     <i class="fas fa-plus-circle"></i>
                     <span>إضافة طلب جديد</span>
                 </a>
                 
-                <!-- الانتقال لملف طلباتي المستقل -->
                 <a href="my-orders.html" class="menu-item">
                     <i class="fas fa-shopping-bag"></i>
                     <span>طلباتي</span>
                 </a>
                 
-                <!-- الانتقال لملف حسابي المستقل -->
                 <a href="my-account.html" class="menu-item">
                     <i class="fas fa-user-circle"></i>
                     <span>حسابي</span>
                 </a>
 
-                <!-- الانتقال لملف الدعم الفني المستقل -->
                 <a href="support.html" class="menu-item">
                     <i class="fas fa-headset"></i>
                     <span>الدعم الفني</span>
@@ -338,17 +349,16 @@ input:focus, textarea:focus {
             </nav>
         </aside>
 
-        <main class="main-content">
+        <main class="main-content" id="mainContent">
             
             <header class="content-header">
                 <div class="user-welcome">
-                    <span>مرحباً بك، <strong>مريم</strong> 👋</span>
+                    <span>مرحباً بك، 👋</span>
                 </div>
             </header>
 
             <div class="content-body">
                 
-                <!-- تم الإبقاء على فورم إضافة الطلب فقط في هذا الملف -->
                 <section id="new-order" class="content-section active">
                     <div class="section-title-box">
                         <h2>إنشاء طلب وساطة جديد</h2>
@@ -413,12 +423,25 @@ input:focus, textarea:focus {
 
     <script>
         // دالة فتح وغلق السايدبار التفاعلية (3 خطوط)
-        function toggleSidebar() {
+        function toggleSidebar(event) {
+            event.stopPropagation(); // منع انتقال الحدث لـ window لكي لا يتم الغلق فوراً
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('open');
+            document.body.classList.toggle('sidebar-active');
         }
 
-        // دالة الضغط على زر إضافة طلب تفتح رسالة ثم تحول المستخدم لصفحة طلباتي المستقلة
+        // إغلاق السايدبار تلقائياً عند الضغط في أي مكان خارجها بالشاشات الصغيرة
+        window.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.getElementById('menuToggle');
+            
+            // التحقق من أن الضغطة خارج السايدبار وخارج زر الـ 3 خطوط
+            if (sidebar.classList.contains('open') && !sidebar.contains(event.target) && !menuToggle.contains(event.target)) {
+                sidebar.classList.remove('open');
+                document.body.classList.remove('sidebar-active');
+            }
+        });
+
         function submitOrder(event) {
             event.preventDefault(); 
             alert('تم تسجيل الطلب بنجاح.');
