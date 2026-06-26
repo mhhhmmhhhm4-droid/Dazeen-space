@@ -333,16 +333,16 @@ input:focus {
                     localStorage.setItem('userId', data.userId);
                     localStorage.setItem('isAdmin', data.isAdmin);
                     alert('✅ تم تسجيل الدخول بنجاح!');
-                    // window.location.href = 'dashboard.html'; 
+                    window.location.href = '/dashboard.html'; 
                 } else {
                     alert('❌ خطأ: ' + data.message);
                 }
             } catch (error) {
-                alert('❌ حدث خطأ في الاتصال بالسيرفر.');
+                alert('❌ حدث خطأ');
             }
         });
 
-        // 4. ربط عملية استعادة كلمة المرور بالسيرفر (المسار الثالث)
+        // 4. ربط عملية استعادة كلمة المرور بالسيرفر (تحديث رابط راندر هنا أيضاً)
         document.getElementById('recoveryForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('recoverEmail').value;
@@ -350,11 +350,10 @@ input:focus {
             const answer = document.getElementById('recoverAnswer').value;
             const newPassword = document.getElementById('newPassword').value;
 
-            // إعادة تركيب نص سؤال الأمان بنفس الطريقة المدمجة في صفحة التسجيل ليتعرف عليها السيرفر
             const fullSecurityQuestion = `Q: ${question} | A: ${answer}`;
 
             try {
-                const response = await fetch('http://localhost:5000/api/auth/recover', {
+                const response = await fetch('https://dazeen-space.online/api/auth/recover', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
@@ -368,7 +367,7 @@ input:focus {
 
                 if (data.success) {
                     alert('🎉 تم تحديث كلمة السر بنجاح! يمكنك الآن تسجيل الدخول بها.');
-                    modal.style.display = 'none'; // إغلاق النافذة
+                    modal.style.display = 'none'; 
                     document.getElementById('recoveryForm').reset();
                 } else {
                     alert('❌ خطأ: ' + data.message);
