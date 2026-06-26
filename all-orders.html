@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كل الطلبات الواردة - لوحة الآدمن</title>
+     <style>* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+    background: radial-gradient(circle at 30% 20%, #1a0f2e 0%, #0b0414 100%);
+    color: #ffffff;
+    min-height: 100vh;
+}
+
+.admin-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* --- السايدبار الخاص بالآدمن --- */
+.admin-sidebar {
+    width: 260px;
+    background-color: rgba(11, 4, 20, 0.9);
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 30px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.icon-red { color: #ff3344; }
+.icon-purple { color: #a855f7; }
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    color: #a29db0;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14.5px;
+    border-radius: 10px;
+    transition: all 0.2s;
+}
+
+.menu-item:hover, .menu-item.active {
+    background-color: rgba(168, 85, 247, 0.15);
+    color: #a855f7;
+}
+
+.menu-item.active {
+    background-color: #a855f7;
+    color: white;
+}
+
+/* --- المحتوى الرئيسي للآدمن --- */
+.admin-content {
+    flex: 1;
+    padding: 40px;
+}
+
+.admin-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.admin-header h2 { font-size: 24px; font-weight: 700; }
+.subtitle { font-size: 14px; color: #a29db0; margin-top: 5px; }
+
+.admin-section-title { margin-bottom: 20px; }
+.admin-section-title h3 { font-size: 16px; font-weight: 700; color: #e2def0; }
+
+/* --- تصميم بطاقة مراجعة الوصل والبيانات --- */
+.receipts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.receipt-admin-card {
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 25px;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 30px;
+}
+
+.customer-info-section h4, .receipt-file-section h4 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #e2def0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* شبكة عرض بيانات شحن الزبون للآدمن */
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.info-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.lbl { font-size: 12px; color: #a29db0; font-weight: 600; }
+.val { font-size: 14px; color: #ffffff; font-weight: 700; }
+
+/* بطاقة عرض التكلفة المحددة */
+.order-price-tag {
+    margin-top: 20px;
+    background: rgba(36, 178, 99, 0.1);
+    border: 1px solid rgba(36, 178, 99, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.order-price-tag span { font-size: 14px; color: #e2def0; }
+.price-val { font-size: 18px; color: #24b263; font-weight: 800; }
+
+/* --- بوكس معاينة صورة الوصل --- */
+.receipt-preview-box {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    height: 220px;
+    margin-bottom: 15px;
+    background-color: #000;
+}
+
+.receipt-preview-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+}
+
+.preview-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(168, 85, 247, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.receipt-preview-box:hover .preview-overlay {
+    opacity: 1;
+}
+
+/* أزرار اتخاذ القرار من الآدمن */
+.admin-action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-admin-action {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: opacity 0.15s;
+}
+
+.btn-approve { background-color: #24b263; }
+.btn-reject { background-color: #ff3344; }
+.btn-admin-action:hover { opacity: 0.9; }
+
+/* التوافق مع الشاشات */
+@media (max-width: 900px) {
+    .receipt-admin-card { grid-template-columns: 1fr; }
+    .admin-wrapper { flex-direction: column; }
+    .admin-sidebar { width: 100%; height: auto; }
+}</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="admin-wrapper">
+        
+        <!-- السايدبار للآدمن -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-user-shield icon-red"></i>
+                <span>لوحة التحكم (الآدمن)</span>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="admin-dashboard.html" class="menu-item">
+                    <i class="fas fa-receipt"></i>
+                    <span>مراجعة الوصولات والدفع</span>
+                </a>
+                <a href="all-orders.html" class="menu-item active">
+                    <i class="fas fa-boxes"></i>
+                    <span>كل الطلبات الواردة</span>
+                </a>
+                <a href="manage-users.html" class="menu-item">
+                    <i class="fas fa-users"></i>
+                    <span>إدارة المستخدمين</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="admin-content">
+            <header class="admin-header">
+                <div class="welcome-box">
+                    <h2><i class="fas fa-boxes icon-purple"></i> إدارة الطلبات الواردة</h2>
+                    <p class="subtitle">هنا تظهر المنتجات المرسلة من الزبائن لتقومي بتسعيرها وإضافة العمولات</p>
+                </div>
+            </header>
+
+            <!-- حالة فارغة لأن الموقع جديد -->
+            <div class="empty-state-box">
+                <div class="empty-icon">
+                    <i class="fas fa-box-open"></i>
+                </div>
+                <h4>لا توجد طلبات جديدة حالياً</h4>
+                <p>عندما يقوم أي زبون بإضافة طلب منتج جديد من لوحة تحكمه، سيظهر لكِ هنا فوراً لتحديد السعر المناسب له.</p>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>

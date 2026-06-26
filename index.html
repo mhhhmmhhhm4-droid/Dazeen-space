@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مرحباً بك في منصتنا</title>
+    <style>
+/* إعدادات الخط والنظام */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    letter-spacing: -0.2px;
+}
+
+body {
+    background-color: #f7faf7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* --- نظام الخلفية الديناميكية بالأبيض والأخضر --- */
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 50%, #ffffff 0%, #edf5ed 100%);
+}
+
+/* التموجات اللونية الخضراء الناعمة */
+.blur-shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    animation: floatBlur 25s infinite alternate ease-in-out;
+}
+.shape-1 {
+    top: -10%;
+    right: -10%;
+    width: 550px;
+    height: 550px;
+    background: #2ec4b6; /* أخضر تركواز ناعم */
+}
+.shape-2 {
+    bottom: -15%;
+    left: -5%;
+    width: 600px;
+    height: 600px;
+    background: #cbf3f0; /* أخضر فاتح جداً */
+    animation-delay: 3s;
+}
+
+@keyframes floatBlur {
+    0% { transform: translate(0px, 0px) scale(1); }
+    50% { transform: translate(30px, -50px) scale(1.05); }
+    100% { transform: translate(-15px, 15px) scale(0.95); }
+}
+
+/* --- الرموز المتحركة والعائمة في الخلفية (عربة، منتجات، ثقة) --- */
+.floating-icons {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.icon-bg {
+    position: absolute;
+    color: rgba(46, 196, 182, 0.15); /* لون أخضر شفاف جداً للرموز */
+    font-size: 35px;
+    animation: floatIcon 12s infinite linear;
+}
+
+/* توزيع الرموز في أماكن مختلفة وسرعات متفاوتة */
+.icon-1 { top: 15%; left: 10%; animation-duration: 14s; } /* عربة تسوق */
+.icon-2 { top: 20%; right: 15%; animation-duration: 18s; animation-delay: 2s; } /* صندوق منتجات */
+.icon-3 { bottom: 25%; left: 15%; animation-duration: 16s; animation-delay: 1s; } /* درع أمان وثقة */
+.icon-4 { bottom: 20%; right: 12%; animation-duration: 15s; } /* نجمة تقييم */
+.icon-5 { top: 50%; left: 8%; animation-duration: 20s; animation-delay: 4s; } /* حقيبة تسوق */
+
+@keyframes floatIcon {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-80px) rotate(360deg); opacity: 0; }
+}
+
+/* --- حاوية الترحيب الفخمة الزجاجية --- */
+.welcome-container {
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    padding: 55px 45px;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(46, 196, 182, 0.05), 0 1px 15px rgba(0, 0, 0, 0.01);
+    width: 100%;
+    max-width: 460px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    z-index: 1;
+}
+
+.main-icon {
+    font-size: 55px;
+    color: #2ec4b6; /* اللون الأخضر الأساسي */
+    margin-bottom: 22px;
+    display: inline-block;
+    animation: pulse 2.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+    100% { transform: scale(1); }
+}
+
+h1 {
+    color: #1d1d1f;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    line-height: 1.3;
+}
+
+.description {
+    color: #6e6e73;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 38px;
+}
+
+/* --- أزرار الانتقال والتحكم --- */
+.cta-group {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.btn {
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-decoration: none;
+    display: block;
+}
+
+.btn-primary {
+    background-color: #2ec4b6;
+    color: white;
+    border: none;
+    box-shadow: 0 6px 18px rgba(46, 196, 182, 0.25);
+}
+
+.btn-primary:hover {
+    background-color: #20a396;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(46, 196, 182, 0.35);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: #2ec4b6;
+    border: 2px solid #2ec4b6;
+}
+
+.btn-secondary:hover {
+    background-color: rgba(46, 196, 182, 0.04);
+    transform: translateY(-1px);
+}
+
+.trust-badge {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: #7a827a;
+    background: rgba(46, 196, 182, 0.05);
+    padding: 8px 14px;
+    border-radius: 20px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.trust-badge i {
+    color: #2ec4b6;
+}
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="background-animation">
+        <div class="blur-shape shape-1"></div>
+        <div class="blur-shape shape-2"></div>
+    </div>
+
+    <div class="floating-icons">
+        <i class="fas fa-shopping-cart icon-bg icon-1"></i>
+        <i class="fas fa-box-open icon-bg icon-2"></i>
+        <i class="fas fa-shield-alt icon-bg icon-3"></i>
+        <i class="fas fa-star icon-bg icon-4"></i>
+        <i class="fas fa-shopping-bag icon-bg icon-5"></i>
+    </div>
+
+    <div class="welcome-container">
+        <div class="main-icon">
+            <i class="fas fa-shield-heart"></i>
+        </div>
+        <h1>منصة الوساطة والتسوق الآمن</h1>
+        <p class="description">
+            نحن نضمن لك تجربة تسوق موثوقة بنسبة 100%. نقوم بمرافقة طلباتك من المتجر وحتى باب منزلك بكل أمان وشفافية.
+        </p>
+
+        <div class="cta-group">
+            <a href="login.html" class="btn btn-primary">تسجيل الدخول إلى حسابك</a>
+            <a href="register.html" class="btn btn-secondary">إنشاء حساب جديد</a>
+        </div>
+
+        <div class="trust-badge">
+            <i class="fas fa-check-circle"></i> منصة معتمدة ومحمية بالكامل
+        </div>
+    </div>
+
+</body>
+</html>

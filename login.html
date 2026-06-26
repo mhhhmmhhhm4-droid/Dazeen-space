@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول</title>
+    <style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    letter-spacing: -0.2px;
+}
+
+body {
+    background-color: #f7faf7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* خلفية متناسقة */
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 50%, #ffffff 0%, #edf5ed 100%);
+}
+
+.blur-shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.3;
+    mix-blend-mode: multiply;
+    animation: floatBlur 25s infinite alternate ease-in-out;
+}
+.shape-1 { top: -10%; right: -10%; width: 500px; height: 500px; background: #2ec4b6; }
+.shape-2 { bottom: -15%; left: -5%; width: 550px; height: 550px; background: #cbf3f0; animation-delay: 3s; }
+
+@keyframes floatBlur {
+    0% { transform: translate(0px, 0px) scale(1); }
+    50% { transform: translate(30px, -50px) scale(1.05); }
+    100% { transform: translate(-15px, 15px) scale(0.95); }
+}
+
+/* حاوية تسجيل الدخول الزجاجية */
+.login-container {
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    padding: 40px 35px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(46, 196, 182, 0.05), 0 1px 10px rgba(0, 0, 0, 0.02);
+    width: 100%;
+    max-width: 420px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    z-index: 1;
+}
+
+h2 {
+    text-align: center;
+    color: #1d1d1f;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #6e6e73;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #3a3a3c;
+    margin-bottom: 8px;
+}
+
+input {
+    padding: 14px;
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    font-size: 15px;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #1d1d1f;
+    transition: all 0.25s ease;
+    text-align: right;
+}
+
+input:focus {
+    border-color: #2ec4b6;
+    background-color: #ffffff;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(46, 196, 182, 0.15);
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.password-wrapper input { width: 100%; padding-left: 45px; }
+
+.toggle-password {
+    position: absolute;
+    left: 15px;
+    color: #86868b;
+    cursor: pointer;
+    font-size: 16px;
+}
+.toggle-password:hover { color: #2ec4b6; }
+
+/* رابط نسيت كلمة السر */
+.forgot-password-link {
+    text-align: left;
+    margin-top: -10px;
+    margin-bottom: 20px;
+}
+.forgot-password-link a {
+    color: #6e6e73;
+    font-size: 13px;
+    text-decoration: none;
+}
+.forgot-password-link a:hover {
+    color: #2ec4b6;
+    text-decoration: underline;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 14px;
+    background-color: #2ec4b6;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 18px rgba(46, 196, 182, 0.25);
+}
+.btn-login:hover {
+    background-color: #20a396;
+    transform: translateY(-1px);
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 14px;
+    color: #1d1d1f;
+}
+.register-link a {
+    color: #2ec4b6;
+    text-decoration: none;
+    font-weight: 600;
+    margin-right: 4px;
+}
+.register-link a:hover { text-decoration: underline; }
+
+/* --- تصميم الواجهة المنبثقة للاستعادة (Modal) --- */
+.modal {
+    display: none; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.modal-content {
+    background-color: #ffffff;
+    padding: 35px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 440px;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+.close-modal {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 20px;
+    color: #86868b;
+    cursor: pointer;
+}
+.close-modal:hover { color: #ff3b30; }
+.security-note {
+    font-size: 12.5px;
+    color: #e65c00;
+    background: rgba(255, 102, 0, 0.05);
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="background-animation">
+        <div class="blur-shape shape-1"></div>
+        <div class="blur-shape shape-2"></div>
+    </div>
+
+    <div class="login-container">
+        <h2>تسجيل الدخول</h2>
+        <p class="subtitle">مرحباً بك مجدداً، يرجى إدخال بياناتك</p>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">البريد الإلكتروني</label>
+                <input type="email" id="email" required placeholder="example@email.com">
+            </div>
+
+            <div class="form-group">
+                <label for="password">كلمة السر</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" required placeholder="••••••••">
+                    <i class="far fa-eye-slash toggle-password" id="togglePassword"></i>
+                </div>
+            </div>
+
+            <div class="forgot-password-link">
+                <a href="#" id="openRecoveryModal">هل نسيت كلمة السر؟</a>
+            </div>
+
+            <button type="submit" class="btn-login">دخول</button>
+        </form>
+
+        <div class="register-link">
+            <p>ليس لديك حساب؟ <a href="register.html">إنشاء حساب جديد</a></p>
+        </div>
+    </div>
+
+    <div class="modal" id="recoveryModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeRecoveryModal"><i class="fas fa-times"></i></span>
+            <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 8px; color: #1d1d1f;">استعادة الحساب</h3>
+            <p class="security-note"><i class="fas fa-info-circle"></i> يرجى كتابة سؤال الأمان وجوابه بنفس الصيغة التي استخدمتها عند التسجيل تماماً.</p>
+
+            <form id="recoveryForm">
+                <div class="form-group">
+                    <label for="recoverEmail">البريد الإلكتروني للحساب</label>
+                    <input type="email" id="recoverEmail" required placeholder="example@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="recoverQuestion">سؤال الأمان الخاص بك</label>
+                    <input type="text" id="recoverQuestion" required placeholder="مثال: ما هو اسم أول مدرسة درست فيها؟">
+                </div>
+
+                <div class="form-group">
+                    <label for="recoverAnswer">إجابة سؤال الأمان</label>
+                    <input type="text" id="recoverAnswer" required placeholder="اكتب الإجابة بدقة">
+                </div>
+
+                <div class="form-group">
+                    <label for="newPassword">كلمة السر الجديدة</label>
+                    <input type="password" id="newPassword" required placeholder="••••••••">
+                </div>
+
+                <button type="submit" class="btn-login" style="background-color: #ff6600; box-shadow: 0 6px 18px rgba(255, 102, 0, 0.25);">تحديث كلمة السر</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 1. إظهار وإخفاء كلمة السر
+        const togglePassword = document.querySelector('#togglePassword');
+        const passwordInput = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        // 2. التحكم في فتح وإغلاق نافذة الاستعادة (Modal)
+        const modal = document.getElementById('recoveryModal');
+        document.getElementById('openRecoveryModal').addEventListener('click', (e) => {
+            e.preventDefault();
+            modal.style.display = 'flex';
+        });
+        document.getElementById('closeRecoveryModal').addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // 3. ربط عملية تسجيل الدخول بالسيرفر
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('userId', data.userId);
+                    localStorage.setItem('isAdmin', data.isAdmin);
+                    alert('✅ تم تسجيل الدخول بنجاح!');
+                    // window.location.href = 'dashboard.html'; 
+                } else {
+                    alert('❌ خطأ: ' + data.message);
+                }
+            } catch (error) {
+                alert('❌ حدث خطأ في الاتصال بالسيرفر.');
+            }
+        });
+
+        // 4. ربط عملية استعادة كلمة المرور بالسيرفر (المسار الثالث)
+        document.getElementById('recoveryForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('recoverEmail').value;
+            const question = document.getElementById('recoverQuestion').value;
+            const answer = document.getElementById('recoverAnswer').value;
+            const newPassword = document.getElementById('newPassword').value;
+
+            // إعادة تركيب نص سؤال الأمان بنفس الطريقة المدمجة في صفحة التسجيل ليتعرف عليها السيرفر
+            const fullSecurityQuestion = `Q: ${question} | A: ${answer}`;
+
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/recover', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        email: email, 
+                        securityQuestion: fullSecurityQuestion, 
+                        newPassword: newPassword 
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('🎉 تم تحديث كلمة السر بنجاح! يمكنك الآن تسجيل الدخول بها.');
+                    modal.style.display = 'none'; // إغلاق النافذة
+                    document.getElementById('recoveryForm').reset();
+                } else {
+                    alert('❌ خطأ: ' + data.message);
+                }
+            } catch (error) {
+                alert('❌ حدث خطأ أثناء معالجة الطلب.');
+            }
+        });
+    </script>
+</body>
+</html>

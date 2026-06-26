@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدعم الفني - منصة الوساطة</title>
+    <style>/* إعدادات خط آبل سان فرانسيسكو والتصفير */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+    /* نفس الخلفية البنفسجية المتدرجة الفخمة العميقة لتوحيد هوية الموقع */
+    background: radial-gradient(circle at 30% 20%, #2e1a47 0%, #120721 100%);
+    color: #ffffff;
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+.support-page-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* --- الهيدر العلوي --- */
+.support-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+}
+
+.header-titles h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 5px;
+}
+
+.purple-light-text {
+    color: #a855f7;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #a29db0;
+    line-height: 1.5;
+}
+
+/* زر العودة للوحة التحكم */
+.btn-back-dashboard {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14.5px;
+    font-weight: 600;
+    padding: 10px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-back-dashboard:hover {
+    background-color: rgba(168, 85, 247, 0.2);
+    border-color: #a855f7;
+}
+
+/* --- تصميم شبكة بطاقات الدعم (Grid Layout) --- */
+.support-grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 35px;
+}
+
+/* الكروت الزجاجية الشفافة بالألوان الفاتحة في النصوص */
+.support-card {
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 35px 25px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.25s ease;
+}
+
+.support-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(168, 85, 247, 0.25);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* دوائر الأيقونات العلوية للبطاقات */
+.card-icon-box {
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+.whatsapp-bg { background-color: rgba(36, 178, 99, 0.15); color: #24b263; }
+.email-bg { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; }
+
+.support-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff; /* أبيض ناصع فاتح */
+    margin-bottom: 12px;
+}
+
+.card-desc {
+    font-size: 13.5px;
+    color: #a29db0; /* بنفسجي رمادي فاتح مريح للعين */
+    line-height: 1.6;
+    margin-bottom: 20px;
+    min-height: 65px; /* لتوحيد ارتفاع النصوص في الكرتين */
+}
+
+.support-card .contact-detail {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 6px 16px;
+    border-radius: 30px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    letter-spacing: 0.5px;
+}
+
+/* تصميم أزرار الاتصال التفاعلية الفخمة */
+.btn-contact {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* زر الواتساب الأخضر الفاتن المتناسق */
+.btn-whatsapp {
+    background-color: #24b263;
+    box-shadow: 0 4px 15px rgba(36, 178, 99, 0.2);
+}
+
+.btn-whatsapp:hover {
+    background-color: #1e9652;
+    transform: scale(1.02);
+}
+
+/* زر الإيميل البنفسجي الفاتن المتناسق */
+.btn-email {
+    background-color: #a855f7;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.2);
+}
+
+.btn-email:hover {
+    background-color: #9333ea;
+    transform: scale(1.02);
+}
+
+/* --- صندوق الملاحظة السفلي المتناسق --- */
+.support-footer-note {
+    background-color: rgba(255, 255, 255, 0.01);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    padding: 16px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.support-footer-note i {
+    font-size: 18px;
+}
+
+.support-footer-note p {
+    font-size: 13.5px;
+    color: #a29db0;
+    line-height: 1.5;
+}
+
+/* التوافق التام مع شاشات الهواتف المحمولة */
+@media (max-width: 650px) {
+    .support-grid-layout {
+        grid-template-columns: 1fr; /* تحويل الكروت لتصبح فوق بعضها عمودياً */
+    }
+    .support-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .btn-back-dashboard {
+        width: 100%;
+        text-align: center;
+    }
+    .support-footer-note {
+        align-items: flex-start;
+    }
+}</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="support-page-container">
+        
+        <header class="support-header">
+            <div class="header-titles">
+                <h2><i class="fas fa-headset purple-light-text"></i> مركز الدعم الفني والاتصال</h2>
+                <p class="subtitle">نحن هنا لمساعدتك! تواصل مباشرة مع مطورة المنصة لحل أي استفسار أو مشكلة</p>
+            </div>
+            <a href="dashboard.html" class="btn-back-dashboard">
+                <i class="fas fa-arrow-left"></i> العودة للوحة التحكم
+            </a>
+        </header>
+
+        <div class="support-grid-layout">
+            
+            <div class="support-card whatsapp-card">
+                <div class="card-icon-box whatsapp-bg">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <h3>تواصل عبر الواتساب</h3>
+                <p class="card-desc">المحادثة الفورية والمباشرة مع مطورة المنصة للاستفسارات السريعة وحالات الطوارئ.</p>
+                <span class="contact-detail">05XXXXXXXX</span>
+                <a href="https://wa.me/213697508156" target="_blank" class="btn-contact btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i> مراسلة فورية
+                </a>
+            </div>
+
+            <div class="support-card email-card">
+                <div class="card-icon-box email-bg">
+                    <i class="far fa-envelope"></i>
+                </div>
+                <h3>البريد الإلكتروني</h3>
+                <p class="card-desc">لإرسال المقترحات الرسمية، الشكاوى، أو استرجاع الحسابات في حال واجهتك أي مشكلة تمنع دخولك.</p>
+                <span class="contact-detail">mariem@example.com</span>
+                <a href="mailto:dokkarmariem2006@gmail.com" class="btn-contact btn-email">
+                    <i class="fas fa-paper-plane"></i> إرسال رسالة بريدية
+                </a>
+            </div>
+
+        </div>
+
+        <div class="support-footer-note">
+            <i class="fas fa-info-circle purple-light-text"></i>
+            <p>أوقات العمل واستقبال الطلبات مستمرة طيلة أيام الأسبوع. جاري معالجة جميع الرسائل في مدة لا تتعدى 24 ساعة.</p>
+        </div>
+
+    </div>
+
+</body>
+</html>

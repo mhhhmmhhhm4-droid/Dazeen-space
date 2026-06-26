@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب جديد</title>
+    <style>/* إعدادات خط آبل سان فرانسيسكو والنظام */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    letter-spacing: -0.2px;
+}
+
+body {
+    background-color: #fcfbf9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* --- نظام الخلفية المتحركة المعبرة --- */
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 50%, #ffffff 0%, #fff5ee 100%);
+}
+
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    mix-blend-mode: multiply;
+    opacity: 0.4;
+    animation: floatAnimation 20s infinite alternate ease-in-out;
+}
+
+.shape1 {
+    top: -10%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: #ff6600;
+    animation-duration: 25s;
+}
+
+.shape2 {
+    bottom: -20%;
+    left: -10%;
+    width: 600px;
+    height: 600px;
+    background: #ffaa66;
+    animation-duration: 30s;
+    animation-delay: 2s;
+}
+
+.shape3 {
+    top: 40%;
+    left: 30%;
+    width: 300px;
+    height: 300px;
+    background: #ffe5d4;
+    animation-duration: 20s;
+    animation-delay: 5s;
+}
+
+@keyframes floatAnimation {
+    0% { transform: translate(0px, 0px) scale(1); }
+    50% { transform: translate(40px, -60px) scale(1.1); }
+    100% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+/* --- حاوية فورم التسجيل الأساسية (شبه شفافة كدمج مع الخلفية) --- */
+.register-container {
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px); /* تأثير الزجاج الضبابي الفخم */
+    -webkit-backdrop-filter: blur(20px);
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(255, 102, 0, 0.05), 0 1px 10px rgba(0, 0, 0, 0.02);
+    width: 100%;
+    max-width: 440px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+h2 {
+    text-align: center;
+    color: #1d1d1f;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #6e6e73;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+/* مجموعات الحقول */
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #3a3a3c;
+    margin-bottom: 8px;
+}
+
+input {
+    padding: 14px;
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    font-size: 15px;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #1d1d1f;
+    transition: all 0.25s ease;
+    text-align: right;
+}
+
+input:focus {
+    border-color: #ff6600;
+    background-color: #ffffff;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(255, 102, 0, 0.15);
+}
+
+/* قسم الأمان التخصيصي */
+.security-section {
+    background-color: rgba(255, 102, 0, 0.03);
+    padding: 18px;
+    border-radius: 14px;
+    margin-top: 10px;
+    margin-bottom: 25px;
+    border: 1px dashed rgba(255, 102, 0, 0.2);
+}
+
+.section-title {
+    font-size: 13px;
+    color: #e65c00;
+    font-weight: 700;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* حاوية حقل كلمة السر والعين */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-left: 45px; 
+}
+
+.toggle-password {
+    position: absolute;
+    left: 15px;
+    color: #86868b;
+    cursor: pointer;
+    font-size: 16px;
+    transition: color 0.2s ease;
+}
+
+.toggle-password:hover {
+    color: #ff6600;
+}
+
+/* زر إنشاء الحساب البرتقالي */
+.btn-register {
+    width: 100%;
+    padding: 14px;
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 20px rgba(255, 102, 0, 0.25);
+}
+
+.btn-register:hover {
+    background-color: #e65c00;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(255, 102, 0, 0.35);
+}
+
+.btn-register:active {
+    transform: translateY(0);
+}
+
+/* رابط تسجيل الدخول الأسفل */
+.login-link {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 14px;
+    color: #1d1d1f;
+}
+
+.login-link a {
+    color: #ff6600;
+    text-decoration: none;
+    font-weight: 600;
+    margin-right: 4px;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+    color: #e65c00;
+}</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="background-animation">
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+        <div class="shape shape3"></div>
+    </div>
+
+    <div class="register-container">
+        <h2>إنشاء حساب جديد</h2>
+        <p class="subtitle">يرجى ملء البيانات التالية للانضمام إلينا</p>
+
+        <form id="registerForm">
+            
+            <div class="form-group">
+                <label for="username">اسم المستخدم</label>
+                <input type="text" id="username" name="username" required placeholder="اكتب اسمك هنا">
+            </div>
+
+            <div class="form-group">
+                <label for="email">البريد الإلكتروني</label>
+                <input type="email" id="email" name="email" required placeholder="example@email.com">
+            </div>
+
+            <div class="form-group">
+                <label for="password">كلمة السر</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" name="password" required placeholder="••••••••">
+                    <i class="far fa-eye-slash toggle-password" id="togglePassword"></i>
+                </div>
+            </div>
+
+            <div class="security-section">
+                <p class="section-title"><i class="fas fa-user-shield"></i> أمان الحساب (تخصيص سؤالك الخاص)</p>
+                
+                <div class="form-group">
+                    <label for="securityQuestion">اكتب سؤال أمان خاص بك</label>
+                    <input type="text" id="securityQuestion" name="securityQuestion" required placeholder="مثال: ما هو اسم أول مدرسة درست فيها؟">
+                </div>
+
+                <div class="form-group">
+                    <label for="securityAnswer">إجابة سؤال الأمان</label>
+                    <input type="text" id="securityAnswer" name="securityAnswer" required placeholder="اكتب الإجابة بدقة هنا">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-register">إنشاء الحساب</button>
+        </form>
+
+        <div class="login-link">
+            <p>هل تملك حساباً؟ <a href="login.html">تسجيل الدخول</a></p>
+        </div>
+    </div>
+
+    <script>
+        // 1. كود إظهار وإخفاء كلمة السر
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function () {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        // ==========================================
+        // 2. كود ربط الحقول وإرسال البيانات للسيرفر
+        // ==========================================
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); // منع الصفحة من التحديث التلقائي
+
+            // جلب القيم من واجهة المستخدم
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const passwordVal = document.getElementById('password').value;
+            const question = document.getElementById('securityQuestion').value;
+            const answer = document.getElementById('securityAnswer').value;
+
+            // دمج السؤال والجواب في نص واحد ليتوافق مع حقل الـ Schema في السيرفر
+            const fullSecurityQuestion = `Q: ${question} | A: ${answer}`;
+
+            try {
+                // إرسال طلب POST إلى السيرفر المحلي
+                const response = await fetch('http://localhost:5000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        username: username, 
+                        email: email, 
+                        password: passwordVal, 
+                        securityQuestion: fullSecurityQuestion 
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('🎉 تم إنشاء حسابك بنجاح! سيتم تحويلك لصفحة تسجيل الدخول.');
+                    window.location.href = 'login.html'; // الانتقال لصفحة تسجيل الدخول
+                } else {
+                    alert('❌ فشل التسجيل: ' + data.message);
+                }
+
+            } catch (error) {
+                console.error('Error during registration:', error);
+                alert('❌ حدث خطأ أثناء الاتصال بالسيرفر. تأكدي من تشغيل سيرفر Node.js أولاً.');
+            }
+        });
+    </script>
+</body>
+</html>

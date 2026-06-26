@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تأكيد الدفع والشحن - منصة الوساطة</title>
+    <style>* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+    background: radial-gradient(circle at 30% 20%, #2e1a47 0%, #120721 100%);
+    color: #ffffff;
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+.checkout-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* --- الهيدر العلوي --- */
+.checkout-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 20px;
+    margin-bottom: 25px;
+}
+
+.header-titles h2 {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.purple-light-text { color: #a855f7; }
+.subtitle { font-size: 14px; color: #a29db0; margin-top: 5px; }
+
+.btn-back {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+.btn-back:hover { background-color: rgba(168, 85, 247, 0.2); border-color: #a855f7; }
+
+/* --- صندوق ملخص السعر المبهج --- */
+.price-summary-box {
+    background: linear-gradient(90deg, rgba(168, 85, 247, 0.2) 0%, rgba(255, 51, 68, 0.1) 100%);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    padding: 18px 25px;
+    border-radius: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.price-text { font-size: 16px; font-weight: 600; color: #e2def0; }
+.price-amount { font-size: 22px; font-weight: 800; color: #24b263; }
+
+/* --- الـ Grid الأساسي للتقسيم لعمودين --- */
+.checkout-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 25px;
+}
+
+.checkout-card {
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 18px;
+    padding: 30px 25px;
+}
+
+.card-title-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+.card-title-box h3 { font-size: 16px; font-weight: 700; }
+.icon-purple { color: #a855f7; }
+.icon-red { color: #ff3344; }
+
+.card-notice { font-size: 13.5px; color: #a29db0; margin-bottom: 20px; line-height: 1.5; }
+
+/* --- تفاصيل الحساب البنكي --- */
+.account-details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.detail-item {
+    background-color: rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    padding: 14px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.detail-label { font-size: 12.5px; color: #a29db0; font-weight: 600; }
+.detail-value { font-size: 14.5px; color: #ffffff; font-weight: 700; }
+.font-mono { font-family: monospace; letter-spacing: 0.5px; color: #a855f7; }
+
+.alert-box {
+    background-color: rgba(255, 51, 68, 0.08);
+    border: 1px solid rgba(255, 51, 68, 0.2);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    color: #ff5566;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.4;
+}
+
+/* --- تصميم الاستمارة (الفورم) --- */
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 16px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.address-field { flex: 2; }
+.zip-field { flex: 1; }
+
+label { font-size: 13px; color: #e2def0; margin-bottom: 8px; font-weight: 600; }
+.required-mark { color: #ff3344; }
+
+input {
+    padding: 12px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    font-size: 14px;
+    color: #ffffff;
+    text-align: right;
+    transition: all 0.2s;
+}
+input:focus { outline: none; border-color: #a855f7; background-color: rgba(0, 0, 0, 0.3); }
+
+/* --- منطقة رفع الملفات التفاعلية الزجاجية --- */
+.file-drop-zone {
+    border: 2px dashed rgba(168, 85, 247, 0.4);
+    background-color: rgba(168, 85, 247, 0.03);
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.file-drop-zone:hover {
+    background-color: rgba(168, 85, 247, 0.07);
+    border-color: #a855f7;
+}
+
+.file-drop-zone input[type="file"] {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.upload-icon { font-size: 32px; color: #a855f7; }
+.upload-text { font-size: 13px; color: #e2def0; }
+.file-name-text { font-size: 12.5px; color: #24b263; font-weight: 600; display: none; margin-top: 5px; }
+
+/* زر الإرسال النهائي */
+.btn-submit-checkout {
+    width: 100%;
+    padding: 15px;
+    background-color: #a855f7;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.25);
+    transition: background-color 0.15s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+.btn-submit-checkout:hover { background-color: #9333ea; }
+
+/* توافق الشاشات للهواتف الذكية */
+@media (max-width: 850px) {
+    .checkout-grid { grid-template-columns: 1fr; }
+    .form-row { flex-direction: column; gap: 16px; }
+    .checkout-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+    .btn-back { width: 100%; text-align: center; }
+}</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="checkout-container">
+        
+        <!-- رأس الصفحة -->
+        <header class="checkout-header">
+            <div class="header-titles">
+                <h2><i class="fas fa-credit-card purple-light-text"></i> إتمام الدفع وتأكيد الطلب</h2>
+                <p class="subtitle">يرجى تحويل المبلغ إلى الحساب الموضح أدناه، ثم ملء استمارة الشحن ورفع وصل الدفع.</p>
+            </div>
+            <a href="my-orders.html" class="btn-back">
+                <i class="fas fa-arrow-left"></i> العودة لطلباتي
+            </a>
+        </header>
+
+        <!-- ملخص السعر (يظهر للزبون) -->
+        <div class="price-summary-box">
+            <div class="price-text">إجمالي تكلفة الطلب (شامل العمولات):</div>
+            <div class="price-amount">14,500 د.ج</div>
+        </div>
+
+        <div class="checkout-grid">
+            
+            <!-- ================= أولاً: معلومات الحساب الدفع (CCP / Baridimob) ================= -->
+            <div class="checkout-card account-info-card">
+                <div class="card-title-box">
+                    <i class="fas fa-university icon-purple"></i>
+                    <h3>معلومات الحساب البريدي والدفع</h3>
+                </div>
+                <p class="card-notice">قم بتحويل المبلغ الإجمالي إلى الحساب التالي وتأكد من أخذ نسخة واضحة من الوصل:</p>
+                
+                <div class="account-details-list">
+                    <div class="detail-item">
+                        <span class="detail-label">اسم صاحب الحساب:</span>
+                        <span class="detail-value">مريم دوكار</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">رقم الحساب (CCP):</span>
+                        <span class="detail-value">0023456789 / المفتاح: 45</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">رقم الـ RIP:</span>
+                        <span class="detail-value">00799999002345678945</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">الحساب الذكي (Baridimob):</span>
+                        <span class="detail-value font-mono">00012345678901234567</span>
+                    </div>
+                </div>
+                
+                <div class="alert-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>ملاحظة: لن يتم قبول أي طلب لا يحتوي على وصل دفع رسمي وواضح.</span>
+                </div>
+            </div>
+
+            <!-- ================= ثانياً: استمارة بيانات الشحن ورفع الوصل ================= -->
+            <div class="checkout-card form-card">
+                <div class="card-title-box">
+                    <i class="fas fa-map-marked-alt icon-red"></i>
+                    <h3>استمارة الشحن وإثبات الدفع</h3>
+                </div>
+
+                <form id="checkoutForm" onsubmit="handleCheckout(event)">
+                    
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="firstName">الاسم <span class="required-mark">*</span></label>
+                            <input type="text" id="firstName" required placeholder="اسمه الشخصي">
+                        </div>
+                        <div class="form-field">
+                            <label for="lastName">اللقب <span class="required-mark">*</span></label>
+                            <input type="text" id="lastName" required placeholder="اللقب العائلي">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="phone">رقم الهاتف <span class="required-mark">*</span></label>
+                            <input type="tel" id="phone" required placeholder="05 / 06 / 07 XXXXXXXX">
+                        </div>
+                        <div class="form-field">
+                            <label for="wilaya">الولاية <span class="required-mark">*</span></label>
+                            <input type="text" id="wilaya" required placeholder="مثال: ورقلة، الجزائر...">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-field address-field">
+                            <label for="address">العنوان الكامل والسكن <span class="required-mark">*</span></label>
+                            <input type="text" id="address" required placeholder="اسم الشارع، رقم المنزل، البلدية">
+                        </div>
+                        <div class="form-field zip-field">
+                            <label for="zipCode">الرمز البريدي (ZIP) <span class="required-mark">*</span></label>
+                            <input type="text" id="zipCode" required placeholder="30000">
+                        </div>
+                    </div>
+
+                    <!-- خانة رفع الملف (صورة أو PDF) -->
+                    <div class="form-field file-upload-field">
+                        <label>صورة وصل الدفع أو ملف الـ PDF <span class="required-mark">*</span></label>
+                        <div class="file-drop-zone">
+                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                            <span class="upload-text">اضغط هنا أو اسحب الوصل (صورة أو ملف PDF)</span>
+                            <!-- يقبل الصور وملفات الـ PDF فقط -->
+                            <input type="file" id="receiptFile" accept="image/*, .pdf" required onchange="updateFileName(this)">
+                            <span id="fileNameDisplay" class="file-name-text"></span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit-checkout">
+                        <i class="fas fa-check-circle"></i> تأكيد وإرسال الإثبات للآدمن
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // إظهار اسم الملف المرفوع للزبون للتأكيد
+        function updateFileName(input) {
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            if(input.files.length > 0) {
+                fileNameDisplay.textContent = "المستند المختار: " + input.files[0].name;
+                fileNameDisplay.style.display = "block";
+            } else {
+                fileNameDisplay.textContent = "";
+                fileNameDisplay.style.display = "none";
+            }
+        }
+
+        // عند إرسال الاستمارة
+        function handleCheckout(event) {
+            event.preventDefault();
+            alert("تم إرسال بيانات الشحن ووصل الدفع بنجاح! سيقوم الآدمن بمراجعة طلبك وتحديث حالته.");
+            window.location.href = 'my-orders.html';
+        }
+    </script>
+</body>
+</html>
