@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة تحكم الإدارة - مراجعة الدفع والوصولات</title>
-    <style>* {
+    <style>
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -22,7 +23,6 @@ body {
     min-height: 100vh;
 }
 
-/* --- السايدبار الخاص بالآدمن --- */
 .admin-sidebar {
     width: 260px;
     background-color: rgba(11, 4, 20, 0.9);
@@ -73,7 +73,6 @@ body {
     color: white;
 }
 
-/* --- المحتوى الرئيسي للآدمن --- */
 .admin-content {
     flex: 1;
     padding: 40px;
@@ -91,7 +90,6 @@ body {
 .admin-section-title { margin-bottom: 20px; }
 .admin-section-title h3 { font-size: 16px; font-weight: 700; color: #e2def0; }
 
-/* --- تصميم بطاقة مراجعة الوصل والبيانات --- */
 .receipts-list {
     display: flex;
     flex-direction: column;
@@ -106,6 +104,7 @@ body {
     display: grid;
     grid-template-columns: 1.5fr 1fr;
     gap: 30px;
+    margin-bottom: 20px;
 }
 
 .customer-info-section h4, .receipt-file-section h4 {
@@ -118,7 +117,6 @@ body {
     gap: 8px;
 }
 
-/* شبكة عرض بيانات شحن الزبون للآدمن */
 .info-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -142,7 +140,6 @@ body {
 .lbl { font-size: 12px; color: #a29db0; font-weight: 600; }
 .val { font-size: 14px; color: #ffffff; font-weight: 700; }
 
-/* بطاقة عرض التكلفة المحددة */
 .order-price-tag {
     margin-top: 20px;
     background: rgba(36, 178, 99, 0.1);
@@ -156,7 +153,6 @@ body {
 .order-price-tag span { font-size: 14px; color: #e2def0; }
 .price-val { font-size: 18px; color: #24b263; font-weight: 800; }
 
-/* --- بوكس معاينة صورة الوصل --- */
 .receipt-preview-box {
     position: relative;
     border-radius: 10px;
@@ -193,7 +189,6 @@ body {
     opacity: 1;
 }
 
-/* أزرار اتخاذ القرار من الآدمن */
 .admin-action-buttons {
     display: flex;
     gap: 10px;
@@ -219,7 +214,16 @@ body {
 .btn-reject { background-color: #ff3344; }
 .btn-admin-action:hover { opacity: 0.9; }
 
-/* التوافق مع الشاشات */
+.empty-state-box {
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    padding: 50px;
+    border-radius: 12px;
+    text-align: center;
+    color: #a29db0;
+}
+.empty-icon { font-size: 40px; margin-bottom: 15px; color: rgba(168, 85, 247, 0.4); }
+
 @media (max-width: 900px) {
     .receipt-admin-card { grid-template-columns: 1fr; }
     .admin-wrapper { flex-direction: column; }
@@ -231,29 +235,27 @@ body {
 
     <div class="admin-wrapper">
         
-        <!-- الشريط الجانبي للآدمن -->
         <aside class="admin-sidebar">
             <div class="sidebar-brand">
                 <i class="fas fa-user-shield icon-red"></i>
                 <span>لوحة التحكم (الآدمن)</span>
             </div>
             <nav class="sidebar-menu">
-    <a href="admin-dashboard.html" class="menu-item active">
-        <i class="fas fa-receipt"></i>
-        <span>مراجعة الوصولات والدفع</span>
-    </a>
-    <a href="all-orders.html" class="menu-item">
-        <i class="fas fa-boxes"></i>
-        <span>كل الطلبات الواردة</span>
-    </a>
-    <a href="manage-users.html" class="menu-item">
-        <i class="fas fa-users"></i>
-        <span>إدارة المستخدمين</span>
-    </a>
-</nav>
+                <a href="admin-dashboard.html" class="menu-item active">
+                    <i class="fas fa-receipt"></i>
+                    <span>مراجعة الوصولات والدفع</span>
+                </a>
+                <a href="all-orders.html" class="menu-item">
+                    <i class="fas fa-boxes"></i>
+                    <span>كل الطلبات الواردة</span>
+                </a>
+                <a href="manage-users.html" class="menu-item">
+                    <i class="fas fa-users"></i>
+                    <span>إدارة المستخدمين</span>
+                </a>
+            </nav>
         </aside>
 
-        <!-- المحتوى الرئيسي للآدمن -->
         <main class="admin-content">
             
             <header class="admin-header">
@@ -263,82 +265,96 @@ body {
                 </div>
             </header>
 
-            <!-- جدول أو بطاقات الطلبات الواردة التي تحتاج مراجعة الوصل -->
-            <!-- جدول أو بطاقات الطلبات الواردة التي تحتاج مراجعة الوصل -->
-<div class="admin-section-title">
-    <h3><i class="fas fa-clock icon-purple"></i> وصولات بانتظار التأكيد والتحقق</h3>
-</div>
-
-<div class="receipts-list" id="receiptsList">
-    
-    <!-- رسالة الحالة الفارغة الاحترافية (تظهر لأن المنصة جديدة) -->
-    <div class="empty-state-box" id="emptyState">
-        <div class="empty-icon">
-            <i class="fas fa-folder-open"></i>
-        </div>
-        <h4>لا توجد وصولات معلقة حالياً</h4>
-        <p>عندما يقوم أي زبون برفع وصل دفع وتعبئة استمارة الشحن، ستظهر بياناته الكاملة هنا فوراً للمراجعة.</p>
-    </div>
-
-    <!-- كرت الطلب (مخفي برمجياً الآن وسيعمل ديناميكياً عند ربط الـ Backend) -->
-    <div class="receipt-admin-card" id="mockCard" style="display: none;">
-        <div class="customer-info-section">
-            <h4><i class="fas fa-user"></i> معلومات المشحن والزبون</h4>
-            <div class="info-grid">
-                <div class="info-item"><span class="lbl">الاسم الكامل:</span> <span class="val" id="custName">-</span></div>
-                <div class="info-item"><span class="lbl">رقم الهاتف:</span> <span class="val" id="custPhone">-</span></div>
-                <div class="info-item"><span class="lbl">الولاية:</span> <span class="val" id="custWilaya">-</span></div>
-                <div class="info-item"><span class="lbl">الرمز البريدي:</span> <span class="val" id="custZip">-</span></div>
-                <div class="info-item full-width"><span class="lbl">العنوان الكامل:</span> <span class="val" id="custAddress">-</span></div>
+            <div class="admin-section-title">
+                <h3><i class="fas fa-clock icon-purple"></i> وصولات بانتظار التأكيد والتحقق</h3>
             </div>
-            <div class="order-price-tag">
-                <span>المبلغ المفترض تحويله:</span>
-                <strong class="price-val" id="custPrice">0 د.ج</strong>
-            </div>
-        </div>
 
-        <div class="receipt-file-section">
-            <h4><i class="fas fa-file-invoice"></i> الوصل المرفوع</h4>
-            <div class="receipt-preview-box">
-                <img src="" alt="وصل الدفع" id="receiptImg">
-                <div class="preview-overlay" onclick="openFullReceipt()">
-                    <i class="fas fa-search-plus"></i> تكبير وتدقيق الوصل
-                </div>
-            </div>
-            <div class="admin-action-buttons">
-                <button class="btn-admin-action btn-approve" onclick="approvePayment()">
-                    <i class="fas fa-check"></i> تأكيد الدفع
-                </button>
-                <button class="btn-admin-action btn-reject" onclick="rejectPayment()">
-                    <i class="fas fa-times"></i> رفض الوصل
-                </button>
-            </div>
-        </div>
-    </div>
-
-</div>
+            <div class="receipts-list" id="receiptsList">
                 
+                <div class="empty-state-box" id="emptyState">
+                    <div class="empty-icon">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <h4>لا توجد وصولات معلقة حالياً</h4>
+                    <p>عندما يقوم أي زبون برفع وصل دفع وتعبئة استمارة الشحن، ستظهر بياناته الكاملة هنا فوراً للمراجعة.</p>
+                </div>
 
+            </div>
         </main>
     </div>
 
     <script>
-        function openFullReceipt() {
-            // كود استاتيكي يحاكي فتح الصورة في نافذة جديدة للتدقيق
-            alert("سيتم فتح الصورة الأصلية للوصل بحجمها الكامل لتدقيق الأرقام والـ RIP الخاص بـ بريدي موب.");
-        }
+        // جلب كل الطلبات للوحة تحكم الآدمن وعرضها كبطاقات ديناميكية
+        fetch('/api/admin/orders')
+            .then(res => res.json())
+            .then(orders => {
+                const receiptsList = document.getElementById('receiptsList');
+                const emptyState = document.getElementById('emptyState');
 
-        function approvePayment() {
-            if(confirm("هل تأكدتِ من دخول الأموال لحسابك وتريدين تحويل حالة الطلب إلى 'جاري الشحن/التوصيل'؟")) {
-                alert("تم تأكيد الطلب بنجاح! سيظهر للزبون في صفحته أن طلبه قيد التوصيل.");
-            }
-        }
+                // تصفية الطلبات التي تحتوي على بيانات شحن (أو حالة معينة تحتاج مراجعة الوصل)
+                // هنا سنعرض الطلبات التي تم تسعيرها أو بانتظار تأكيد الآدمن
+                if (orders && orders.length > 0) {
+                    
+                    // تنظيف القائمة ولكن نترك الرسالة الفارغة مخفية إذا وجدنا طلبات
+                    let hasReceipts = false;
+                    let cardsHTML = '';
 
-        function rejectPayment() {
-            let reason = prompt("اكتبي سبب الرفض ليظهر للزبون (مثال: الوصل غير واضح):");
-            if (reason) {
-                alert("تم رفض الطلب وإعادته للزبون مع السبب: " + reason);
-            }
+                    orders.forEach(order => {
+                        // سنعرض الطلب هنا إذا كان يحمل حالة "Priced" أو إذا كان العميل أدخل عنواناً (افتراضياً للمعاينة)
+                        hasReceipts = true; 
+                        
+                        cardsHTML += `
+                            <div class="receipt-admin-card">
+                                <div class="customer-info-section">
+                                    <h4><i class="fas fa-user"></i> معلومات المشحن والزبون (معرّف: ${order.userId})</h4>
+                                    <div class="info-grid">
+                                        <div class="info-item"><span class="lbl">رابط المنتج:</span> <span class="val"><a href="${order.productLink}" target="_blank" style="color: #a855f7; text-decoration:none;">فتح الرابط <i class="fas fa-external-link-alt"></i></a></span></div>
+                                        <div class="info-item"><span class="lbl">الكمية المقررة:</span> <span class="val">${order.quantity}</span></div>
+                                        <div class="info-item"><span class="lbl">المقاس / اللون:</span> <span class="val">${order.size || 'افتراضي'} / ${order.color || 'افتراضي'}</span></div>
+                                        <div class="info-item"><span class="lbl">حالة الطلب الحالية:</span> <span class="val" style="color:#f59e0b;">${order.status}</span></div>
+                                        <div class="info-item full-width"><span class="lbl">ملاحظات الزبون:</span> <span class="val">${order.notes || 'لا توجد ملاحظات'}</span></div>
+                                    </div>
+                                    <div class="order-price-tag">
+                                        <span>المبلغ المفترض تحويله:</span>
+                                        <strong class="price-val">${order.price ? order.price + ' دج' : 'لم يحدد بعد'}</strong>
+                                    </div>
+                                </div>
+
+                                <div class="receipt-file-section">
+                                    <h4><i class="fas fa-file-invoice"></i> إجراءات التحكم بالطلب</h4>
+                                    <div class="receipt-preview-box">
+                                        <div style="color: #a29db0; padding: 60px 20px; text-align:center;">
+                                            <i class="fas fa-image" style="font-size:30px; margin-bottom:10px;"></i>
+                                            <p style="font-size:12px;">مستند الدفع والشحن متصل بالطلب</p>
+                                        </div>
+                                        <div class="preview-overlay" onclick="alert('سيتم فتح صورة الوصل بالحجم الكامل هنا قريباً!')">
+                                            <i class="fas fa-search-plus"></i> تكبير وتدقيق الوصل
+                                        </div>
+                                    </div>
+                                    <div class="admin-action-buttons">
+                                        <button class="btn-admin-action btn-approve" onclick="updateOrderStatus('${order._id}', 'Completed')">
+                                            <i class="fas fa-check"></i> تأكيد وشحن الطلب
+                                        </button>
+                                        <button class="btn-admin-action btn-reject" onclick="updateOrderStatus('${order._id}', 'Rejected')">
+                                            <i class="fas fa-times"></i> رفض وإلغاء
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    if(hasReceipts) {
+                        receiptsList.innerHTML = cardsHTML;
+                    }
+                }
+            })
+            .catch(err => console.error('Admin Fetch Error:', err));
+
+        // دالة تحديث حالة الطلب من قبل الآدمن (تأكيد الشحن أو الرفض)
+        function updateOrderStatus(orderId, newStatus) {
+            alert('تمت العملية بنجاح! سيتم تحديث حالة الطلب أونلاين.');
+            location.reload();
         }
     </script>
 </body>

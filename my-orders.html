@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>طلباتي - منصة الوساطة</title>
-     <style>* {
+    <style>
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -12,7 +13,6 @@
 }
 
 body {
-    /* العودة للخلفية البنفسجية الفخمة المتدرجة المتناسقة مع الموقع */
     background: radial-gradient(circle at 30% 20%, #2e1a47 0%, #120721 100%);
     color: #ffffff;
     min-height: 100vh;
@@ -24,7 +24,6 @@ body {
     margin: 0 auto;
 }
 
-/* --- الهيدر العلوي --- */
 .orders-header {
     display: flex;
     justify-content: space-between;
@@ -50,7 +49,6 @@ body {
     color: #a29db0;
 }
 
-/* زر العودة للوحة التحكم متناسق بالأبيض والبنفسجي */
 .btn-back-dashboard {
     color: #ffffff;
     text-decoration: none;
@@ -68,7 +66,6 @@ body {
     border-color: #a855f7;
 }
 
-/* --- تصميم حاوية الجدول الزجاجية الفخمة --- */
 .table-card-wrapper {
     background-color: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -93,7 +90,43 @@ body {
     border-bottom: 2px solid rgba(255, 255, 255, 0.08);
 }
 
-/* تنسيق رسالة الجدول الفارغ الاستاتيكي */
+.static-orders-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 14.5px;
+}
+
+.product-link-table {
+    color: #a855f7;
+    text-decoration: none;
+    font-weight: 600;
+}
+.product-link-table:hover { text-decoration: underline; }
+
+/* ملصقات الحالات الملونة وفخمة */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+.status-pending { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.status-priced { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; }
+.status-completed { background-color: rgba(34, 197, 94, 0.15); color: #22c55e; }
+
+/* أزرار الإجراءات */
+.btn-action-pay {
+    background-color: #22c55e;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+}
+.btn-action-pay:hover { background-color: #16a34a; }
+
 .empty-table-message {
     padding: 60px 20px !important;
     text-align: center;
@@ -111,7 +144,6 @@ body {
     font-weight: 500;
 }
 
-/* ================= صندوق الدفع والشحن الاستاتيكي البنفسجي ================= */
 .payment-static-section {
     background-color: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -144,11 +176,9 @@ body {
     background: none;
     border: none;
     color: #a29db0;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 20px;
     cursor: pointer;
 }
-
 .btn-cancel-payment:hover { color: #ff3344; }
 
 .payment-total-alert {
@@ -206,7 +236,6 @@ body {
     font-weight: 600;
     cursor: pointer;
 }
-
 .btn-submit-shipping-final:hover { background-color: #9333ea; }
 
 @media (max-width: 600px) {
@@ -257,7 +286,7 @@ body {
         <div class="payment-static-section" id="paymentSection">
             <div class="payment-section-header">
                 <h3><i class="fas fa-truck"></i> معلومات الشحن والدفع للطلب</h3>
-                <button class="btn-cancel-payment" onclick="hidePaymentSection()">&times; إلغاء العملية</button>
+                <button class="btn-cancel-payment" onclick="hidePaymentSection()">&times;</button>
             </div>
             
             <div class="payment-total-alert">
@@ -265,30 +294,31 @@ body {
             </div>
 
             <form id="shippingForm" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" id="currentOrderId">
                 <div class="form-grid-layout">
                     <div class="form-input-box">
                         <label>الاسم الشخصي</label>
-                        <input type="text" required placeholder="مثال: مريم">
+                        <input type="text" id="shippingName" required placeholder="مثال: مريم">
                     </div>
                     
                     <div class="form-input-box">
                         <label>اللقب (اسم العائلة)</label>
-                        <input type="text" required placeholder="مثال: دوكار">
+                        <input type="text" id="shippingLastName" required placeholder="مثال: دوكار">
                     </div>
 
                     <div class="form-input-box">
                         <label>رقم الهاتف</label>
-                        <input type="tel" required placeholder="05XXXXXXXX">
+                        <input type="tel" id="shippingPhone" required placeholder="05XXXXXXXX">
                     </div>
 
                     <div class="form-input-box">
                         <label>الرمز البريدي</label>
-                        <input type="text" required placeholder="30000">
+                        <input type="text" id="shippingZip" required placeholder="30000">
                     </div>
 
                     <div class="form-input-box full-width">
                         <label>العنوان الشخصي والكامل للتوصيل</label>
-                        <input type="text" required placeholder="اكتب عنوانك بدقة متناهية لضمان وصول السلعة">
+                        <input type="text" id="shippingAddress" required placeholder="اكتب عنوانك بدقة متناهية لضمان وصول السلعة">
                     </div>
                 </div>
                 
@@ -301,15 +331,106 @@ body {
     </div>
 
     <script>
+        const userId = localStorage.getItem('userId');
+
+        if (!userId) {
+            alert("الرجاء تسجيل الدخول أولاً");
+            window.location.href = 'login.html';
+        } else {
+            // جلب الطلبات الخاصة بالمستخدم
+            fetch(`/api/orders/user/${userId}`)
+                .then(res => res.json())
+                .then(orders => {
+                    const tbody = document.getElementById('ordersTableBody');
+                    
+                    if (orders && orders.length > 0) {
+                        tbody.innerHTML = ''; // إزالة رسالة "لا توجد طلبات"
+                        
+                        orders.forEach(order => {
+                            // تخصيص تسميات الحالات والألوان وفخامتها
+                            let statusClass = 'status-pending';
+                            let statusText = order.status || 'قيد الانتظار';
+                            let actionButton = '<span style="color:#a29db0; font-size:12px;">بانتظار التسعير</span>';
+
+                            if(order.status === 'Priced' || order.status === 'تم التسعير') {
+                                statusClass = 'status-priced';
+                                statusText = 'تم التسعير';
+                                actionButton = `<button class="btn-action-pay" onclick="showPaymentSection('${order._id}', '${order.price || 0}')">إتمام الدفع</button>`;
+                            } else if (order.status === 'Completed' || order.status === 'تم الشحن') {
+                                statusClass = 'status-completed';
+                                statusText = 'تم الشحن والطلب مكتمل';
+                                actionButton = '<span style="color:#22c55e; font-size:12px;"><i class="fas fa-check"></i> مكتمل</span>';
+                            }
+
+                            tbody.innerHTML += `
+                                <tr>
+                                    <td><a class="product-link-table" href="${order.productLink}" target="_blank">معاينة الرابط الخاص بالمنتج <i class="fas fa-external-link-alt"></i></a></td>
+                                    <td><strong>${order.quantity}</strong></td>
+                                    <td><span style="color: #22c55e; font-weight:700;">${order.price ? order.price + ' دج' : 'لم يُسعر بعد'}</span></td>
+                                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                                    <td>${actionButton}</td>
+                                </tr>
+                            `;
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error('Error fetching orders:', err);
+                });
+        }
+
+        // دالة إظهار صندوق الدفع
+        function showPaymentSection(orderId, price) {
+            document.getElementById('currentOrderId').value = orderId;
+            document.getElementById('priceDisplay').innerText = price + ' دج';
+            document.getElementById('paymentSection').classList.add('active-box');
+            document.getElementById('paymentSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // دالة إخفاء صندوق الدفع
         function hidePaymentSection() {
             document.getElementById('paymentSection').classList.remove('active-box');
         }
 
+        // دالة معالجة إرسال الفورم (الدفع والشحن)
         function handleFormSubmit(event) {
-            event.preventDefault();
-            alert("تم إرسال عنوان الشحن وبيانات الدفع بنجاح!");
+    event.preventDefault();
+    
+    const orderId = document.getElementById('currentOrderId').value;
+    
+    // تجميع البيانات من المدخلات
+    const formData = {
+        firstName: document.getElementById('shippingName').value,
+        lastName: document.getElementById('shippingLastName').value,
+        phone: document.getElementById('shippingPhone').value,
+        wilaya: 'الولاية الافتراضية', // يمكنكِ إضافة حقل ولاية في الـ HTML لاحقاً
+        address: document.getElementById('shippingAddress').value,
+        zipCode: document.getElementById('shippingZip').value
+    };
+
+    // إرسال البيانات إلى السيرفر
+    fetch(`/api/orders/checkout/${orderId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.success) {
+            alert('✅ تم إرسال بيانات الشحن والدفع بنجاح! السيرفر يستقبلها الآن.');
             hidePaymentSection();
+            location.reload(); // إعادة تحميل الصفحة لتحديث الحالة إلى "Verifying Payment"
+        } else {
+            alert('❌ فشل إرسال البيانات: ' + data.message);
         }
+    })
+    .catch(err => {
+        console.error('Checkout Error:', err);
+        alert('❌ حدث خطأ أثناء الاتصال بالسيرفر.');
+    });
+}
     </script>
 </body>
 </html>

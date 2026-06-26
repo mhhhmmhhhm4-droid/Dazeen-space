@@ -196,6 +196,16 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'login.html'));
 });
 
+// مسار خاص بالآدمن لجلب جميع طلبات المستخدمين
+app.get('/api/admin/orders', async (req, res) => {
+    try {
+        const orders = await Order.find({}); // جلب كل شيء بدون تصفية
+        res.status(200).json(orders);
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Error fetching all orders." });
+    }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`🚀 Server is running and protected on: http://localhost:${PORT}`);
