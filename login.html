@@ -330,6 +330,7 @@ input:focus {
                 const data = await response.json();
 
                 if (data.success) {
+                    // تأكدي أن الحفظ مكتوب هكذا عند نجاح الدخول
                     localStorage.setItem('userId', data.userId);
                     localStorage.setItem('isAdmin', data.isAdmin);
                     alert('✅ تم تسجيل الدخول بنجاح!');
