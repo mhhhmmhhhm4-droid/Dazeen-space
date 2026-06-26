@@ -9,7 +9,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
 
     try {
         // 2. إرسال البيانات إلى السيرفر عبر الـ API
-        const response = await fetch('http://localhost:5000/api/auth/register', {
+        const response = await fetch('https://www.dazeen-space.online/api/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
