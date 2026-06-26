@@ -316,7 +316,7 @@ input:focus {
 
             try {
                 // إرسال طلب POST إلى السيرفر المحلي
-                const response = await fetch('http://localhost:5000/api/auth/register', {
+                const response = await fetch('https://dazeen-space.online/api/auth/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -340,7 +340,7 @@ input:focus {
 
             } catch (error) {
                 console.error('Error during registration:', error);
-                alert('❌ حدث خطأ أثناء الاتصال بالسيرفر. تأكدي من تشغيل سيرفر Node.js أولاً.');
+                alert('❌ حدث خطأ');
             }
         });
     </script>
