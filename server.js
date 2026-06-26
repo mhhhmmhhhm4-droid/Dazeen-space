@@ -123,6 +123,11 @@ app.post('/api/orders/new', async (req, res) => {
     }
 });
 
+// مسار عرض صفحة إضافة طلب جديد
+app.get('/add-order', (req, res) => {
+    res.sendFile(path.join(__dirname, 'add-order.html'));
+});
+
 // 5. Route: Navigation to "My Orders" (التنقل إلى طلباتي)
 app.get('/api/orders/user/:userId', async (req, res) => {
     try {
