@@ -4,7 +4,7 @@ require('dotenv').config({ path: path.join(__dirname, '.env') });
 const express = require('express');
 const mongoose = require('mongoose');
 const multer = require('multer');
-
+const cors = require('cors');
 const app = express();
 
 // 1. Middlewares & Static Files
@@ -66,6 +66,16 @@ const Order = mongoose.model('Order', orderSchema);
 
 
 // ================= 5. API Routes =================
+
+// 2. تفعيل الـ CORS لتسمح للموقع المحلي بالاتصال بالسيرفر
+app.use(cors({
+    origin: '*', // يسمح بالاتصال من أي مكان حالياً لتخطي المشكلة أثناء التطوير
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
 
 // 1. مسار الصفحة الترحيبية (الرئيسية)
 app.get('/', (req, res) => {
