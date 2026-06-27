@@ -3,358 +3,388 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم الإدارة - مراجعة الدفع والوصولات</title>
+    <title>لوحة تحكم الآدمن - إدارة الطلبات</title>
     <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
+        /* إعدادات النظام وخط سان فرانسيسكو الاحترافي */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
 
-body {
-    background: radial-gradient(circle at 30% 20%, #1a0f2e 0%, #0b0414 100%);
-    color: #ffffff;
-    min-height: 100vh;
-}
+        body {
+            background: radial-gradient(circle at 30% 20%, #1a0f2e 0%, #0b0414 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-.admin-wrapper {
-    display: flex;
-    min-height: 100vh;
-}
+        .dashboard-wrapper {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+        }
 
-.admin-sidebar {
-    width: 260px;
-    background-color: rgba(11, 4, 20, 0.9);
-    border-left: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 30px 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
+        /* --- زر القائمة التفاعلي للشاشات الصغيرة --- */
+        .menu-toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #a855f7;
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+            transition: all 0.2s ease;
+        }
 
-.sidebar-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 18px;
-    font-weight: 700;
-}
+        .menu-toggle-btn:hover {
+            background-color: #9333ea;
+            transform: scale(1.05);
+        }
 
-.icon-red { color: #ff3344; }
-.icon-purple { color: #a855f7; }
+        /* --- تصميم القائمة الجانبية (Sidebar) --- */
+        .sidebar {
+            width: 260px;
+            background-color: rgba(11, 4, 20, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 16px;
+            position: fixed;
+            height: 100vh;
+            right: -260px; 
+            top: 0;
+            z-index: 95;
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-.sidebar-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
+        .sidebar.open {
+            right: 0;
+        }
 
-.menu-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px;
-    color: #a29db0;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14.5px;
-    border-radius: 10px;
-    transition: all 0.2s;
-}
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 19px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 40px;
+            padding-right: 12px;
+        }
 
-.menu-item:hover, .menu-item.active {
-    background-color: rgba(168, 85, 247, 0.15);
-    color: #a855f7;
-}
+        .purple-icon {
+            color: #a855f7;
+        }
 
-.menu-item.active {
-    background-color: #a855f7;
-    color: white;
-}
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-.admin-content {
-    flex: 1;
-    padding: 40px;
-}
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: none;
+            border: none;
+            padding: 14px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: right;
+            color: #a29db0;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            width: 100%;
+            text-decoration: none;
+        }
 
-.admin-header {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding-bottom: 20px;
-    margin-bottom: 30px;
-}
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #a855f7;
+        }
 
-.admin-header h2 { font-size: 24px; font-weight: 700; }
-.subtitle { font-size: 14px; color: #a29db0; margin-top: 5px; }
+        .menu-item.active {
+            background-color: #a855f7;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+        }
 
-.admin-section-title { margin-bottom: 20px; }
-.admin-section-title h3 { font-size: 16px; font-weight: 700; color: #e2def0; }
+        .logout-btn {
+            margin-top: auto;
+            color: #ff3344;
+        }
 
-.receipts-list {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
+        .logout-btn:hover {
+            background-color: rgba(255, 51, 68, 0.1);
+        }
 
-.receipt-admin-card {
-    background-color: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
-    padding: 25px;
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: 30px;
-    margin-bottom: 20px;
-}
+        /* --- قسم المحتوى الرئيسي وجدول البيانات الفخم --- */
+        .main-content {
+            flex: 1;
+            margin-right: 0;
+            padding: 40px 30px;
+            padding-top: 90px;
+            width: 100%;
+            transition: filter 0.3s ease;
+        }
 
-.customer-info-section h4, .receipt-file-section h4 {
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 15px;
-    color: #e2def0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+        body.sidebar-active .main-content {
+            filter: brightness(0.6);
+            pointer-events: none;
+        }
 
-.info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    background-color: rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.03);
-}
+        .section-title-box h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
 
-.info-item {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
+        .section-subtitle {
+            font-size: 14px;
+            color: #a29db0;
+            margin-bottom: 30px;
+        }
 
-.info-item.full-width {
-    grid-column: 1 / -1;
-}
+        /* حاوية الجدول لمنع خروج البيانات في الشاشات الصغيرة */
+        .table-container {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 20px;
+            overflow-x: auto;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
 
-.lbl { font-size: 12px; color: #a29db0; font-weight: 600; }
-.val { font-size: 14px; color: #ffffff; font-weight: 700; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+            min-width: 700px;
+        }
 
-.order-price-tag {
-    margin-top: 20px;
-    background: rgba(36, 178, 99, 0.1);
-    border: 1px solid rgba(36, 178, 99, 0.2);
-    padding: 15px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.order-price-tag span { font-size: 14px; color: #e2def0; }
-.price-val { font-size: 18px; color: #24b263; font-weight: 800; }
+        th {
+            background-color: rgba(168, 85, 247, 0.1);
+            color: #a855f7;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 16px;
+            border-bottom: 2px solid rgba(168, 85, 247, 0.2);
+        }
 
-.receipt-preview-box {
-    position: relative;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    height: 220px;
-    margin-bottom: 15px;
-    background-color: #000;
-}
+        td {
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 14px;
+            color: #e2def0;
+            vertical-align: middle;
+        }
 
-.receipt-preview-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.8;
-}
+        tr:hover td {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
 
-.preview-overlay {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(168, 85, 247, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    opacity: 0;
-    cursor: pointer;
-    transition: opacity 0.2s ease;
-}
+        /* روابط المنتجات */
+        .product-link {
+            color: #38bdf8;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
 
-.receipt-preview-box:hover .preview-overlay {
-    opacity: 1;
-}
+        .product-link:hover {
+            text-decoration: underline;
+        }
 
-.admin-action-buttons {
-    display: flex;
-    gap: 10px;
-}
+        /* ستايل خانة الملاحظات */
+        .notes-text {
+            color: #a29db0;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-.btn-admin-action {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-size: 13.5px;
-    font-weight: 600;
-    color: white;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    transition: opacity 0.15s;
-}
+        .notes-text:hover {
+            white-space: normal;
+            max-width: none;
+        }
 
-.btn-approve { background-color: #24b263; }
-.btn-reject { background-color: #ff3344; }
-.btn-admin-action:hover { opacity: 0.9; }
+        /* شارات الحالة الافتراضية (قيد التسعير) */
+        .status-badge {
+            background-color: rgba(234, 179, 8, 0.15);
+            color: #eab308;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
 
-.empty-state-box {
-    background-color: rgba(255, 255, 255, 0.02);
-    border: 1px dashed rgba(255, 255, 255, 0.1);
-    padding: 50px;
-    border-radius: 12px;
-    text-align: center;
-    color: #a29db0;
-}
-.empty-icon { font-size: 40px; margin-bottom: 15px; color: rgba(168, 85, 247, 0.4); }
-
-@media (max-width: 900px) {
-    .receipt-admin-card { grid-template-columns: 1fr; }
-    .admin-wrapper { flex-direction: column; }
-    .admin-sidebar { width: 100%; height: auto; }
-}</style>
+        /* استعلامات الشاشات الكبيرة */
+        @media (min-width: 769px) {
+            .sidebar {
+                right: 0;
+            }
+            .main-content {
+                margin-right: 260px;
+                padding-top: 40px;
+            }
+            .menu-toggle-btn {
+                display: none;
+            }
+            body.sidebar-active .main-content {
+                filter: none;
+                pointer-events: auto;
+            }
+        }
+    </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <div class="admin-wrapper">
+    <div class="dashboard-wrapper">
         
-        <aside class="admin-sidebar">
+        <button class="menu-toggle-btn" id="menuToggle" onclick="toggleSidebar(event)">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-brand">
-                <i class="fas fa-user-shield icon-red"></i>
+                <i class="fas fa-shield-alt purple-icon"></i>
                 <span>لوحة التحكم (الآدمن)</span>
             </div>
+            
             <nav class="sidebar-menu">
                 <a href="admin-dashboard.html" class="menu-item active">
-                    <i class="fas fa-receipt"></i>
-                    <span>مراجعة الوصولات والدفع</span>
-                </a>
-                <a href="all-orders.html" class="menu-item">
                     <i class="fas fa-boxes"></i>
-                    <span>كل الطلبات الواردة</span>
+                    <span>إدارة طلبات الزبائن</span>
                 </a>
-                <a href="manage-users.html" class="menu-item">
-                    <i class="fas fa-users"></i>
-                    <span>إدارة المستخدمين</span>
-                </a>
+                
+                <button class="menu-item logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>تسجيل الخروج</span>
+                </button>
             </nav>
         </aside>
 
-        <main class="admin-content">
+        <main class="main-content" id="mainContent">
             
-            <header class="admin-header">
-                <div class="welcome-box">
-                    <h2>مرحباً، المديرة مريم 👑</h2>
-                    <p class="subtitle">هنا تجدين كل البيانات ووصولات الدفع المرفوعة من طرف الزبائن للمراجعة والتأكيد</p>
+            <div class="content-body">
+                <div class="section-title-box">
+                    <h2>طلبات الوساطة الواردة</h2>
+                    <p class="section-subtitle">استعرض الطلبات الجديدة المرسلة من الزبائن للبدء في تسعيرها</p>
                 </div>
-            </header>
-
-            <div class="admin-section-title">
-                <h3><i class="fas fa-clock icon-purple"></i> وصولات بانتظار التأكيد والتحقق</h3>
-            </div>
-
-            <div class="receipts-list" id="receiptsList">
                 
-                <div class="empty-state-box" id="emptyState">
-                    <div class="empty-icon">
-                        <i class="fas fa-folder-open"></i>
-                    </div>
-                    <h4>لا توجد وصولات معلقة حالياً</h4>
-                    <p>عندما يقوم أي زبون برفع وصل دفع وتعبئة استمارة الشحن، ستظهر بياناته الكاملة هنا فوراً للمراجعة.</p>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>رقم الزبون (ID)</th>
+                                <th>رابط المنتج الأصلي</th>
+                                <th>المقاس / القياس</th>
+                                <th>اللون المطلوب</th>
+                                <th>الكمية</th>
+                                <th>مواصفات وملاحظات الزبون</th>
+                                <th>الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminOrdersTable">
+                            </tbody>
+                    </table>
                 </div>
-
             </div>
+
         </main>
+
     </div>
 
     <script>
-        // جلب كل الطلبات للوحة تحكم الآدمن وعرضها كبطاقات ديناميكية
-        fetch('/api/admin/orders')
-            .then(res => res.json())
-            .then(orders => {
-                const receiptsList = document.getElementById('receiptsList');
-                const emptyState = document.getElementById('emptyState');
+        // دالة التحكم في السايدبار التفاعلية
+        function toggleSidebar(event) {
+            event.stopPropagation(); 
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+            document.body.classList.toggle('sidebar-active');
+        }
 
-                // تصفية الطلبات التي تحتوي على بيانات شحن (أو حالة معينة تحتاج مراجعة الوصل)
-                // هنا سنعرض الطلبات التي تم تسعيرها أو بانتظار تأكيد الآدمن
-                if (orders && orders.length > 0) {
-                    
-                    // تنظيف القائمة ولكن نترك الرسالة الفارغة مخفية إذا وجدنا طلبات
-                    let hasReceipts = false;
-                    let cardsHTML = '';
+        window.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.getElementById('menuToggle');
+            
+            if (sidebar.classList.contains('open') && !sidebar.contains(event.target) && !menuToggle.contains(event.target)) {
+                sidebar.classList.remove('open');
+                document.body.classList.remove('sidebar-active');
+            }
+        });
 
-                    orders.forEach(order => {
-                        // سنعرض الطلب هنا إذا كان يحمل حالة "Priced" أو إذا كان العميل أدخل عنواناً (افتراضياً للمعاينة)
-                        hasReceipts = true; 
-                        
-                        cardsHTML += `
-                            <div class="receipt-admin-card">
-                                <div class="customer-info-section">
-                                    <h4><i class="fas fa-user"></i> معلومات المشحن والزبون (معرّف: ${order.userId})</h4>
-                                    <div class="info-grid">
-                                        <div class="info-item"><span class="lbl">رابط المنتج:</span> <span class="val"><a href="${order.productLink}" target="_blank" style="color: #a855f7; text-decoration:none;">فتح الرابط <i class="fas fa-external-link-alt"></i></a></span></div>
-                                        <div class="info-item"><span class="lbl">الكمية المقررة:</span> <span class="val">${order.quantity}</span></div>
-                                        <div class="info-item"><span class="lbl">المقاس / اللون:</span> <span class="val">${order.size || 'افتراضي'} / ${order.color || 'افتراضي'}</span></div>
-                                        <div class="info-item"><span class="lbl">حالة الطلب الحالية:</span> <span class="val" style="color:#f59e0b;">${order.status}</span></div>
-                                        <div class="info-item full-width"><span class="lbl">ملاحظات الزبون:</span> <span class="val">${order.notes || 'لا توجد ملاحظات'}</span></div>
-                                    </div>
-                                    <div class="order-price-tag">
-                                        <span>المبلغ المفترض تحويله:</span>
-                                        <strong class="price-val">${order.price ? order.price + ' دج' : 'لم يحدد بعد'}</strong>
-                                    </div>
-                                </div>
+        // جلب الطلبات من السيرفر عند تحميل الصفحة فوراً
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchOrdersForAdmin();
+        });
 
-                                <div class="receipt-file-section">
-                                    <h4><i class="fas fa-file-invoice"></i> إجراءات التحكم بالطلب</h4>
-                                    <div class="receipt-preview-box">
-                                        <div style="color: #a29db0; padding: 60px 20px; text-align:center;">
-                                            <i class="fas fa-image" style="font-size:30px; margin-bottom:10px;"></i>
-                                            <p style="font-size:12px;">مستند الدفع والشحن متصل بالطلب</p>
-                                        </div>
-                                        <div class="preview-overlay" onclick="alert('سيتم فتح صورة الوصل بالحجم الكامل هنا قريباً!')">
-                                            <i class="fas fa-search-plus"></i> تكبير وتدقيق الوصل
-                                        </div>
-                                    </div>
-                                    <div class="admin-action-buttons">
-                                        <button class="btn-admin-action btn-approve" onclick="updateOrderStatus('${order._id}', 'Completed')">
-                                            <i class="fas fa-check"></i> تأكيد وشحن الطلب
-                                        </button>
-                                        <button class="btn-admin-action btn-reject" onclick="updateOrderStatus('${order._id}', 'Rejected')">
-                                            <i class="fas fa-times"></i> رفض وإلغاء
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    });
+        function fetchOrdersForAdmin() {
+            const tableBody = document.getElementById('adminOrdersTable');
+            tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #a29db0;">🔄 جاري جلب الطلبات الجديدة...</td></tr>`;
 
-                    if(hasReceipts) {
-                        receiptsList.innerHTML = cardsHTML;
+            // جلب كافة الطلبات المخزنة في الـ Backend
+            fetch('/api/orders') 
+                .then(res => res.json())
+                .then(orders => {
+                    tableBody.innerHTML = ""; // تفريغ رسالة التحميل
+
+                    if (!orders || orders.length === 0) {
+                        tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #a29db0;">📭 لا توجد أي طلبات مسجلة في قاعدة البيانات حالياً.</td></tr>`;
+                        return;
                     }
-                }
-            })
-            .catch(err => console.error('Admin Fetch Error:', err));
 
-        // دالة تحديث حالة الطلب من قبل الآدمن (تأكيد الشحن أو الرفض)
-        function updateOrderStatus(orderId, newStatus) {
-            alert('تمت العملية بنجاح! سيتم تحديث حالة الطلب أونلاين.');
-            location.reload();
+                    // بناء الأسطر بناءً على حقول add-order الجديدة والمحدثة
+                    orders.forEach(order => {
+                        const row = `
+                            <tr>
+                                <td style="font-family: monospace; color: #a855f7; font-weight: bold;">${order.userId || 'مجهول'}</td>
+                                <td>
+                                    <a href="${order.productLink}" target="_blank" class="product-link">
+                                        <i class="fas fa-external-link-alt"></i> فتح الرابط
+                                    </a>
+                                </td>
+                                <td>${order.size || 'N/A'}</td>
+                                <td>${order.color || 'N/A'}</td>
+                                <td style="font-weight: bold; color: #ffffff;">${order.quantity || 1}</td>
+                                <td>
+                                    <div class="notes-text" title="اضغطي مرتين لتكبير النص">
+                                        ${order.notes || '<span style="opacity: 0.4;">لا توجد ملاحظات</span>'}
+                                    </div>
+                                </td>
+                                <td><span class="status-badge">بانتظار التسعير</span></td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(err => {
+                    console.error("Error fetching admin orders:", err);
+                    tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #ff3344;">❌ فشل الاتصال بالسيرفر وجلب البيانات.</td></tr>`;
+                });
+        }
+
+        function logout() {
+            if(confirm("هل أنت متأكد من رغبتك في تسجيل الخروج من لوحة الآدمن؟")) {
+                window.location.href = 'login.html';
+            }
         }
     </script>
 </body>
