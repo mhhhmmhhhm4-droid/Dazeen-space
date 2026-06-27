@@ -134,7 +134,7 @@ app.post('/api/orders/new', async (req, res) => {
 });
 
 // مسار عرض صفحة إضافة طلب جديد
-app.get('/add-order', (req, res) => {
+app.get('/add-order.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'add-order.html'));
 });
 
