@@ -7,19 +7,24 @@ const multer = require('multer');
 const cors = require('cors');
 const app = express();
 
-// 1. Middlewares & Static Files
+// ================= 1. Global Middlewares & CORS (تفعيل في البداية لحل مشكلة الـ CORS تماماً) =================
+app.use(cors({
+    origin: '*', // يسمح بالاتصال من أي مكان حالياً لتخطي المشكلة أثناء التطوير
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname)));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// 2. Database Connection (تعديل الرابط إلى الصيغة القياسية لتخطي حجب الـ DNS)
-const mongoURI = 'mongodb://lunastory:lunastory2000@cluster0-shard-00-00.cho5gkn.mongodb.net:27017,cluster0-shard-00-01.cho5gkn.mongodb.net:27017,cluster0-shard-00-02.cho5gkn.mongodb.net:27017/brokerage_platform?ssl=true&replicaSet=atlas-cho5gkn-shard-0&authSource=admin&retryWrites=true&w=majority';
-
+// ================= 2. Database Connection =================
 mongoose.connect(process.env.MONGO_URI, { connectTimeoutMS: 15000 })
 .then(() => console.log('✅ MongoDB connected successfully to Atlas Cloud via secured .env file!'))
 .catch(err => console.error('❌ Database connection error. Check your .env path or Atlas IP Whitelist:', err));
-// 3. Multer Setup for Receipt Uploads
+
+// ================= 3. Multer Setup for Receipt Uploads =================
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/');
@@ -33,7 +38,7 @@ const upload = multer({ storage: storage });
 
 // ================= 4. Database Models =================
 
-// User Schema (with Security Question for Password Recovery)
+// User Schema
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
@@ -43,13 +48,14 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', userSchema);
 
-// Order Schema (with full workflow tracking)
+// Order Schema (تم إضافة حقل notes هنا لحفظ الملاحظات بنجاح)
 const orderSchema = new mongoose.Schema({
     userId: String, 
     productLink: String,
     size: String,
     color: String,
     quantity: Number,
+    notes: { type: String, default: '' }, // الحقل الجديد 
     status: { type: String, default: 'Pending' }, 
     price: { type: Number, default: 0 },
     shippingDetails: {
@@ -67,22 +73,12 @@ const Order = mongoose.model('Order', orderSchema);
 
 // ================= 5. API Routes =================
 
-// 2. تفعيل الـ CORS لتسمح للموقع المحلي بالاتصال بالسيرفر
-app.use(cors({
-    origin: '*', // يسمح بالاتصال من أي مكان حالياً لتخطي المشكلة أثناء التطوير
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }))
-
-// 1. مسار الصفحة الترحيبية (الرئيسية)
+// مسار الصفحة الرئيسية
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// 1. Route: Register (التسجيل)
+// Route: Register (التسجيل)
 app.post('/api/auth/register', async (req, res) => {
     try {
         const { username, email, password, securityQuestion } = req.body;
@@ -94,7 +90,7 @@ app.post('/api/auth/register', async (req, res) => {
     }
 });
 
-// 2. Route: Login (تسجيل الدخول)
+// Route: Login (تسجيل الدخول)
 app.post('/api/auth/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -106,7 +102,7 @@ app.post('/api/auth/login', async (req, res) => {
     }
 });
 
-// 3. Route: Password Recovery (استعادة كلمة المرور)
+// Route: Password Recovery (استعادة كلمة المرور)
 app.post('/api/auth/recover', async (req, res) => {
     try {
         const { email, securityQuestion, newPassword } = req.body;
@@ -121,11 +117,11 @@ app.post('/api/auth/recover', async (req, res) => {
     }
 });
 
-// 4. Route: Add New Order (إضافة طلب)
+// Route: Add New Order (تعديل المسار ليستقبل ويحفظ حقل الملاحظات notes بنجاح)
 app.post('/api/orders/new', async (req, res) => {
     try {
-        const { userId, productLink, size, color, quantity } = req.body;
-        const newOrder = new Order({ userId, productLink, size, color, quantity });
+        const { userId, productLink, size, color, quantity, notes } = req.body;
+        const newOrder = new Order({ userId, productLink, size, color, quantity, notes });
         await newOrder.save();
         res.status(201).json({ success: true, message: "Order placed successfully! Waiting for admin pricing." });
     } catch (error) {
@@ -138,7 +134,7 @@ app.get('/add-order.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'add-order.html'));
 });
 
-// 5. Route: Navigation to "My Orders" (التنقل إلى طلباتي)
+// Route: Navigation to "My Orders" (طلباتي للزبون)
 app.get('/api/orders/user/:userId', async (req, res) => {
     try {
         const orders = await Order.find({ userId: req.params.userId });
@@ -148,7 +144,7 @@ app.get('/api/orders/user/:userId', async (req, res) => {
     }
 });
 
-// 6. Route: Navigation to "My Account" (التنقل إلى حسابي)
+// Route: Navigation to "My Account" (حسابي)
 app.get('/api/user/profile/:userId', async (req, res) => {
     try {
         const user = await User.findById(req.params.userId).select('-password');
@@ -159,19 +155,19 @@ app.get('/api/user/profile/:userId', async (req, res) => {
     }
 });
 
-// 7. Route: Support (الدعم)
+// Route: Support (الدعم)
 app.post('/api/support/contact', (req, res) => {
     const { userId, subject, message } = req.body;
     console.log(`📩 Support ticket received from ${userId}: [${subject}] - ${message}`);
     res.status(200).json({ success: true, message: "Support ticket received. We will contact you soon." });
 });
 
-// 8. Route: Logout (تسجيل الخروج)
+// Route: Logout (تسجيل الخروج)
 app.post('/api/auth/logout', (req, res) => {
     res.status(200).json({ success: true, message: "Logged out successfully." });
 });
 
-// 9. Route: Delete Order (حذف الطلب)
+// Route: Delete Order (حذف الطلب)
 app.delete('/api/orders/delete/:orderId', async (req, res) => {
     try {
         await Order.findByIdAndDelete(req.params.orderId);
@@ -181,7 +177,7 @@ app.delete('/api/orders/delete/:orderId', async (req, res) => {
     }
 });
 
-// 10 & 11. Route: Payment & Upload Slip (الدفع ورفع الوصل)
+// Route: Payment & Upload Slip (الدفع ورفع الوصل)
 app.post('/api/orders/checkout/:orderId', upload.single('receiptFile'), async (req, res) => {
     try {
         const { firstName, lastName, phone, wilaya, address, zipCode } = req.body;
@@ -199,22 +195,20 @@ app.post('/api/orders/checkout/:orderId', upload.single('receiptFile'), async (r
     }
 });
 
+// ================= 6. Admin Routes =================
 
-// ================= 6. Server Initialization =================
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'login.html'));
-});
-
-// مسار خاص بالآدمن لجلب جميع طلبات المستخدمين
-app.get('/api/admin/orders', async (req, res) => {
+// تعديل رابط الآدمن ليتوافق مع الـ fetch المكتوب في لوحة التحكم المطلوبة سابقا (/api/orders)
+app.get('/api/orders', async (req, res) => {
     try {
-        const orders = await Order.find({}); // جلب كل شيء بدون تصفية
+        const orders = await Order.find({}); // جلب كل طلبات المنصة للآدمن
         res.status(200).json(orders);
     } catch (error) {
-        res.status(500).json({ success: false, message: "Error fetching all orders." });
+        res.status(500).json({ success: false, message: "Error fetching all orders for admin." });
     }
 });
+
+
+// ================= 7. Server Initialization =================
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
