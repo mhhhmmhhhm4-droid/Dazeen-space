@@ -5,11 +5,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const cors = require('cors');
+
 const app = express();
 
-// ================= 1. Global Middlewares & CORS (تفعيل في البداية لحل مشكلة الـ CORS تماماً) =================
+// ================= 1. Global Middlewares & CORS =================
 app.use(cors({
-    origin: '*', // يسمح بالاتصال من أي مكان حالياً لتخطي المشكلة أثناء التطوير
+    origin: '*', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -27,14 +28,17 @@ mongoose.connect(process.env.MONGO_URI, { connectTimeoutMS: 15000 })
 // ================= 3. Multer Setup for Receipt Uploads =================
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/');
+        cb(null, 'uploads/'); // تأكدي من وجود مجلد باسم uploads بجانب هذا الملف
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
+        cb(null, Date.now() + path.extname(file.originalname)); 
     }
 });
-const upload = multer({ storage: storage });
 
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 } // حد أقصى 5 ميجا
+});
 
 // ================= 4. Database Models =================
 
@@ -48,14 +52,14 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', userSchema);
 
-// Order Schema (تم إضافة حقل notes هنا لحفظ الملاحظات بنجاح)
+// Order Schema
 const orderSchema = new mongoose.Schema({
     userId: String, 
     productLink: String,
     size: String,
     color: String,
     quantity: Number,
-    notes: { type: String, default: '' }, // الحقل الجديد 
+    notes: { type: String, default: '' }, 
     status: { type: String, default: 'Pending' }, 
     price: { type: Number, default: 0 },
     shippingDetails: {
@@ -69,7 +73,6 @@ const orderSchema = new mongoose.Schema({
     receiptUrl: String 
 });
 const Order = mongoose.model('Order', orderSchema);
-
 
 // ================= 5. API Routes =================
 
@@ -117,7 +120,7 @@ app.post('/api/auth/recover', async (req, res) => {
     }
 });
 
-// Route: Add New Order (تعديل المسار ليستقبل ويحفظ حقل الملاحظات notes بنجاح)
+// Route: Add New Order
 app.post('/api/orders/new', async (req, res) => {
     try {
         const { userId, productLink, size, color, quantity, notes } = req.body;
@@ -134,7 +137,7 @@ app.get('/add-order.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'add-order.html'));
 });
 
-// Route: Navigation to "My Orders" (طلباتي للزبون)
+// Route: Get User Orders (طلباتي للزبون)
 app.get('/api/orders/user/:userId', async (req, res) => {
     try {
         const orders = await Order.find({ userId: req.params.userId });
@@ -144,7 +147,7 @@ app.get('/api/orders/user/:userId', async (req, res) => {
     }
 });
 
-// Route: Navigation to "My Account" (حسابي)
+// Route: Get User Profile (حسابي)
 app.get('/api/user/profile/:userId', async (req, res) => {
     try {
         const user = await User.findById(req.params.userId).select('-password');
@@ -177,78 +180,42 @@ app.delete('/api/orders/delete/:orderId', async (req, res) => {
     }
 });
 
-// Route: Payment & Upload Slip (الدفع ورفع الوصل)
-app.post('/api/orders/checkout/:orderId', upload.single('receiptFile'), async (req, res) => {
+// Route: Payment & Upload Slip (الدفع ورفع الوصل - مُوحد ومُصلح لاستقبال حقل receipt الحقيقي)
+app.post('/api/orders/checkout/:orderId', upload.single('receipt'), async (req, res) => {
     try {
         const { firstName, lastName, phone, wilaya, address, zipCode } = req.body;
         const receiptUrl = req.file ? `/uploads/${req.file.filename}` : '';
 
-        await Order.findByIdAndUpdate(req.params.orderId, {
+        const updatedOrder = await Order.findByIdAndUpdate(req.params.orderId, {
             shippingDetails: { firstName, lastName, phone, wilaya, address, zipCode },
             receiptUrl: receiptUrl,
             status: 'Verifying Payment'
-        });
+        }, { new: true });
 
-        res.status(200).json({ success: true, message: "Payment info and receipt uploaded successfully!" });
+        if (!updatedOrder) {
+            return res.status(404).json({ success: false, message: "الطلب غير موجود" });
+        }
+
+        res.status(200).json({ success: true, message: "Payment info and receipt uploaded successfully!", order: updatedOrder });
     } catch (error) {
-        res.status(500).json({ success: false, message: "Error during checkout process." });
+        console.error("Checkout Error:", error);
+        res.status(500).json({ success: false, message: "Error during checkout process.", error: error.message });
     }
 });
 
 // ================= 6. Admin Routes =================
 
-// تعديل رابط الآدمن ليتوافق مع الـ fetch المكتوب في لوحة التحكم المطلوبة سابقا (/api/orders)
+// Route: Get All Orders for Admin (مصلح وموحد)
 app.get('/api/orders', async (req, res) => {
     try {
-        const orders = await Order.find({}); // جلب كل طلبات المنصة للآدمن
+        const orders = await Order.find({});
         res.status(200).json(orders);
     } catch (error) {
         res.status(500).json({ success: false, message: "Error fetching all orders for admin." });
     }
 });
 
-app.get('/api/orders', async (req, res) => {
-    try {
-        const orders = await Order.find();
-        res.json(orders);
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
-    }
-});
-
-// مسار تحديث السعر (PUT) المصلح والمطابق تماماً للـ Frontend
-app.put('/api/admin/orders/price/:orderId', async (req, res) => {
-    try {
-        const { price } = req.body;
-        const { orderId } = req.params;
-
-        const updatedOrder = await Order.findByIdAndUpdate(
-            orderId,
-            { price: Number(price), status: 'تم التسعير' },
-            { new: true }
-        );
-
-        if (!updatedOrder) {
-            return res.status(404).json({ success: false, message: "الطلب غير موجود" });
-        }
-
-        res.json({ success: true, message: "تم تحديث السعر بنجاح", order: updatedOrder });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ success: false, message: "خطأ داخلي في السيرفر" });
-    }
-});
-
-// الاتصال بقاعدة البيانات وتشغيل السيرفر
-mongoose.connect('YOUR_MONGODB_CONNECTION_STRING') // ضعي رابط الـ Atlas الخاص بكِ هنا
-.then(() => {
-    app.listen(5000, () => {
-        console.log('🚀 Server is running on: http://localhost:5000');
-    });
-})
-.catch(err => console.error('Database connection error:', err));
-
-// مسار تحديث السعر من طرف الآدمن
+// Route: Update Price by Admin (موحد ومتوافق مع حالتي الاحتمال Priced أو تم التسعير)
 app.put('/api/admin/orders/price/:orderId', async (req, res) => {
     try {
         const { price } = req.body;
@@ -256,7 +223,7 @@ app.put('/api/admin/orders/price/:orderId', async (req, res) => {
 
         const updatedOrder = await Order.findByIdAndUpdate(
             orderId, 
-            { price: price, status: 'Priced' }, 
+            { price: Number(price), status: 'تم التسعير' }, 
             { new: true }
         );
 
@@ -264,7 +231,7 @@ app.put('/api/admin/orders/price/:orderId', async (req, res) => {
             return res.status(404).json({ success: false, message: "Order not found" });
         }
 
-        res.status(200).json({ success: true, message: "Price updated successfully!" });
+        res.status(200).json({ success: true, message: "Price updated successfully!", order: updatedOrder });
     } catch (error) {
         console.error("Error updating price:", error);
         res.status(500).json({ success: false, message: "Internal server error" });
@@ -272,7 +239,6 @@ app.put('/api/admin/orders/price/:orderId', async (req, res) => {
 });
 
 // ================= 7. Server Initialization =================
-
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`🚀 Server is running and protected on: http://localhost:${PORT}`);
