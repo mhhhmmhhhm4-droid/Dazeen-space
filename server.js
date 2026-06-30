@@ -207,6 +207,47 @@ app.get('/api/orders', async (req, res) => {
     }
 });
 
+app.get('/api/orders', async (req, res) => {
+    try {
+        const orders = await Order.find();
+        res.json(orders);
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// مسار تحديث السعر (PUT) المصلح والمطابق تماماً للـ Frontend
+app.put('/api/admin/orders/price/:orderId', async (req, res) => {
+    try {
+        const { price } = req.body;
+        const { orderId } = req.params;
+
+        const updatedOrder = await Order.findByIdAndUpdate(
+            orderId,
+            { price: Number(price), status: 'تم التسعير' },
+            { new: true }
+        );
+
+        if (!updatedOrder) {
+            return res.status(404).json({ success: false, message: "الطلب غير موجود" });
+        }
+
+        res.json({ success: true, message: "تم تحديث السعر بنجاح", order: updatedOrder });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: "خطأ داخلي في السيرفر" });
+    }
+});
+
+// الاتصال بقاعدة البيانات وتشغيل السيرفر
+mongoose.connect('YOUR_MONGODB_CONNECTION_STRING') // ضعي رابط الـ Atlas الخاص بكِ هنا
+.then(() => {
+    app.listen(5000, () => {
+        console.log('🚀 Server is running on: http://localhost:5000');
+    });
+})
+.catch(err => console.error('Database connection error:', err));
+
 // مسار تحديث السعر من طرف الآدمن
 app.put('/api/admin/orders/price/:orderId', async (req, res) => {
     try {
