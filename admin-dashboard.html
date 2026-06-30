@@ -337,55 +337,55 @@
         });
 
         function fetchOrdersForAdmin() {
-            const tableBody = document.getElementById('adminOrdersTable');
-            tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #a29db0;">🔄 جاري جلب الطلبات الجديدة...</td></tr>`;
+    const tableBody = document.getElementById('adminOrdersTable');
+    tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #a29db0;">🔄 جاري جلب الطلبات الجديدة...</td></tr>`;
 
-            // جلب كافة الطلبات المخزنة في الـ Backend
-            fetch('/api/orders') 
-                .then(res => res.json())
-                .then(orders => {
-                    tableBody.innerHTML = ""; // تفريغ رسالة التحميل
-
-                    if (!orders || orders.length === 0) {
-                        tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #a29db0;">📭 لا توجد أي طلبات مسجلة في قاعدة البيانات حالياً.</td></tr>`;
-                        return;
-                    }
-
-                    // بناء الأسطر بناءً على حقول add-order الجديدة والمحدثة
-                    orders.forEach(order => {
-                        const row = `
-                            <tr>
-                                <td style="font-family: monospace; color: #a855f7; font-weight: bold;">${order.userId || 'مجهول'}</td>
-                                <td>
-                                    <a href="${order.productLink}" target="_blank" class="product-link">
-                                        <i class="fas fa-external-link-alt"></i> فتح الرابط
-                                    </a>
-                                </td>
-                                <td>${order.size || 'N/A'}</td>
-                                <td>${order.color || 'N/A'}</td>
-                                <td style="font-weight: bold; color: #ffffff;">${order.quantity || 1}</td>
-                                <td>
-                                    <div class="notes-text" title="اضغطي مرتين لتكبير النص">
-                                        ${order.notes || '<span style="opacity: 0.4;">لا توجد ملاحظات</span>'}
-                                    </div>
-                                </td>
-                                <td><span class="status-badge">بانتظار التسعير</span></td>
-                            </tr>
-                        `;
-                        tableBody.innerHTML += row;
-                    });
-                })
-                .catch(err => {
-                    console.error("Error fetching admin orders:", err);
-                    tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #ff3344;">❌ فشل الاتصال بالسيرفر وجلب البيانات.</td></tr>`;
-                });
-        }
-
-        function logout() {
-            if(confirm("هل أنت متأكد من رغبتك في تسجيل الخروج من لوحة الآدمن؟")) {
-                window.location.href = 'login.html';
+    // استخدام الرابط الكامل للسيرفر لضمان جلب البيانات حتى لو كنتِ تشغلين اللوحة من أي مكان
+    fetch('http://localhost:5000/api/orders') 
+        .then(res => {
+            if (!res.ok) {
+                throw new Error('Network response was not ok: ' + res.statusText);
             }
-        }
+            return res.json();
+        })
+        .then(orders => {
+            tableBody.innerHTML = ""; // تفريغ رسالة التحميل
+
+            if (!orders || orders.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #a29db0;">📭 لا توجد أي طلبات مسجلة في قاعدة البيانات حالياً.</td></tr>`;
+                return;
+            }
+
+            // بناء الأسطر
+            orders.forEach(order => {
+                const row = `
+                    <tr>
+                        <td style="font-family: monospace; color: #a855f7; font-weight: bold;">${order.userId || 'مجهول'}</td>
+                        <td>
+                            <a href="${order.productLink}" target="_blank" class="product-link">
+                                <i class="fas fa-external-link-alt"></i> فتح الرابط
+                            </a>
+                        </td>
+                        <td>${order.size || 'N/A'}</td>
+                        <td>${order.color || 'N/A'}</td>
+                        <td style="font-weight: bold; color: #ffffff;">${order.quantity || 1}</td>
+                        <td>
+                            <div class="notes-text" title="ملاحظات الزبون">
+                                ${order.notes || '<span style="opacity: 0.4;">لا توجد ملاحظات</span>'}
+                            </div>
+                        </td>
+                        <td><span class="status-badge">بانتظار التسعير</span></td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        })
+        .catch(err => {
+            console.error("Error fetching admin orders:", err);
+            tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #ff3344;">❌ فشل الاتصال بالسيرفر وجلب البيانات. تأكدي من تشغيل السيرفر على منفذ 5000</td></tr>`;
+        });
+}
+        
     </script>
 </body>
 </html>
