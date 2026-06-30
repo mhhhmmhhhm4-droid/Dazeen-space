@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم الآدمن - إدارة الطلبات</title>
+    <title>كل الطلبات الواردة - لوحة الآدمن</title>
     <style>
-        /* إعدادات النظام وخط سان فرانسيسكو الاحترافي */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -17,147 +16,94 @@
             background: radial-gradient(circle at 30% 20%, #1a0f2e 0%, #0b0414 100%);
             color: #ffffff;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
-        .dashboard-wrapper {
+        .admin-wrapper {
             display: flex;
             min-height: 100vh;
-            position: relative;
         }
 
-        /* --- زر القائمة التفاعلي للشاشات الصغيرة --- */
-        .menu-toggle-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #a855f7;
-            color: white;
-            border: none;
-            padding: 12px 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 18px;
-            z-index: 100;
-            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
-            transition: all 0.2s ease;
-        }
-
-        .menu-toggle-btn:hover {
-            background-color: #9333ea;
-            transform: scale(1.05);
-        }
-
-        /* --- تصميم القائمة الجانبية (Sidebar) --- */
-        .sidebar {
+        /* --- السايدبار الخاص بالآدمن --- */
+        .admin-sidebar {
             width: 260px;
-            background-color: rgba(11, 4, 20, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: rgba(11, 4, 20, 0.9);
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 30px 15px;
             display: flex;
             flex-direction: column;
-            padding: 30px 16px;
-            position: fixed;
-            height: 100vh;
-            right: -260px; 
-            top: 0;
-            z-index: 95;
-            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .sidebar.open {
-            right: 0;
+            gap: 30px;
         }
 
         .sidebar-brand {
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 40px;
-            padding-right: 12px;
+            margin-bottom: 10px;
         }
 
-        .purple-icon {
-            color: #a855f7;
-        }
+        .icon-purple { color: #a855f7; }
 
         .sidebar-menu {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
+            flex: 1;
         }
 
         .menu-item {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
+            padding: 14px;
+            color: #a29db0;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14.5px;
+            border-radius: 10px;
+            transition: all 0.2s;
             background: none;
             border: none;
-            padding: 14px 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            text-align: right;
-            color: #a29db0;
-            font-size: 15px;
-            font-weight: 600;
-            transition: all 0.2s ease;
             width: 100%;
-            text-decoration: none;
+            text-align: right;
+            cursor: pointer;
         }
 
         .menu-item:hover {
-            background-color: rgba(255, 255, 255, 0.05);
+            background-color: rgba(168, 85, 247, 0.15);
             color: #a855f7;
         }
 
         .menu-item.active {
             background-color: #a855f7;
-            color: #ffffff;
-            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+            color: white;
         }
 
         .logout-btn {
             margin-top: auto;
             color: #ff3344;
         }
-
         .logout-btn:hover {
             background-color: rgba(255, 51, 68, 0.1);
         }
 
-        /* --- قسم المحتوى الرئيسي وجدول البيانات الفخم --- */
-        .main-content {
+        /* --- المحتوى الرئيسي للآدمن --- */
+        .admin-content {
             flex: 1;
-            margin-right: 0;
-            padding: 40px 30px;
-            padding-top: 90px;
-            width: 100%;
-            transition: filter 0.3s ease;
+            padding: 40px;
         }
 
-        body.sidebar-active .main-content {
-            filter: brightness(0.6);
-            pointer-events: none;
-        }
-
-        .section-title-box h2 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 6px;
-        }
-
-        .section-subtitle {
-            font-size: 14px;
-            color: #a29db0;
+        .admin-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 20px;
             margin-bottom: 30px;
         }
 
-        /* حاوية الجدول لمنع خروج البيانات في الشاشات الصغيرة */
+        .admin-header h2 { font-size: 24px; font-weight: 700; }
+        .subtitle { font-size: 14px; color: #a29db0; margin-top: 5px; }
+
+        /* --- تصميم حاوية الجدول الفخم --- */
         .table-container {
             background-color: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.06);
@@ -171,7 +117,7 @@
             width: 100%;
             border-collapse: collapse;
             text-align: right;
-            min-width: 700px;
+            min-width: 800px;
         }
 
         th {
@@ -195,35 +141,13 @@
             background-color: rgba(255, 255, 255, 0.02);
         }
 
-        /* روابط المنتجات */
         .product-link {
             color: #38bdf8;
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
             font-weight: 600;
         }
+        .product-link:hover { text-decoration: underline; }
 
-        .product-link:hover {
-            text-decoration: underline;
-        }
-
-        /* ستايل خانة الملاحظات */
-        .notes-text {
-            color: #a29db0;
-            max-width: 200px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .notes-text:hover {
-            white-space: normal;
-            max-width: none;
-        }
-
-        /* شارات الحالة الافتراضية (قيد التسعير) */
         .status-badge {
             background-color: rgba(234, 179, 8, 0.15);
             color: #eab308;
@@ -234,46 +158,69 @@
             display: inline-block;
         }
 
-        /* استعلامات الشاشات الكبيرة */
-        @media (min-width: 769px) {
-            .sidebar {
-                right: 0;
-            }
-            .main-content {
-                margin-right: 260px;
-                padding-top: 40px;
-            }
-            .menu-toggle-btn {
-                display: none;
-            }
-            body.sidebar-active .main-content {
-                filter: none;
-                pointer-events: auto;
-            }
+        .price-input {
+            width: 110px;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(0,0,0,0.4);
+            color: white;
+            text-align: center;
+        }
+
+        .save-btn {
+            background: #a855f7;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .save-btn:hover { background: #9333ea; }
+
+        .notes-text {
+            color: #a29db0;
+            max-width: 180px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media (max-width: 900px) {
+            .admin-wrapper { flex-direction: column; }
+            .admin-sidebar { width: 100%; height: auto; }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <div class="dashboard-wrapper">
+    <div class="admin-wrapper">
         
-        <button class="menu-toggle-btn" id="menuToggle" onclick="toggleSidebar(event)">
-            <i class="fas fa-bars"></i>
-        </button>
-
-        <aside class="sidebar" id="sidebar">
+        <aside class="admin-sidebar" id="sidebar">
             <div class="sidebar-brand">
-                <i class="fas fa-shield-alt purple-icon"></i>
+                <i class="fas fa-user-shield icon-purple"></i>
                 <span>لوحة التحكم (الآدمن)</span>
             </div>
             
             <nav class="sidebar-menu">
-                <a href="admin-dashboard.html" class="menu-item active">
-                    <i class="fas fa-boxes"></i>
-                    <span>إدارة طلبات الزبائن</span>
+                <a href="review-payments.html" class="menu-item">
+                    <i class="fas fa-receipt"></i>
+                    <span>مراجعة الوصولات والدفع</span>
                 </a>
                 
+                <a href="admin-dashboard.html" class="menu-item active">
+                    <i class="fas fa-boxes"></i>
+                    <span>كل الطلبات الواردة</span>
+                </a>
+                
+                <a href="manage-users.html" class="menu-item">
+                    <i class="fas fa-users"></i>
+                    <span>إدارة المستخدمين</span>
+                </a>
+
                 <button class="menu-item logout-btn" onclick="logout()">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>تسجيل الخروج</span>
@@ -281,111 +228,120 @@
             </nav>
         </aside>
 
-        <main class="main-content" id="mainContent">
-            
-            <div class="content-body">
-                <div class="section-title-box">
-                    <h2>طلبات الوساطة الواردة</h2>
-                    <p class="section-subtitle">استعرض الطلبات الجديدة المرسلة من الزبائن للبدء في تسعيرها</p>
+        <main class="admin-content">
+            <header class="admin-header">
+                <div class="welcome-box">
+                    <h2><i class="fas fa-boxes icon-purple"></i> إدارة الطلبات الواردة</h2>
+                    <p class="subtitle">هنا تظهر المنتجات المرسلة من الزبائن لتقومي بتسعيرها وإضافة العمولات</p>
                 </div>
-                
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>رقم الزبون (ID)</th>
-                                <th>رابط المنتج الأصلي</th>
-                                <th>المقاس / القياس</th>
-                                <th>اللون المطلوب</th>
-                                <th>الكمية</th>
-                                <th>مواصفات وملاحظات الزبون</th>
-                                <th>الحالة</th>
-                            </tr>
-                        </thead>
-                        <tbody id="adminOrdersTable">
-                            </tbody>
-                    </table>
-                </div>
+            </header>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>رقم الزبون (ID)</th>
+                            <th>رابط المنتج الأصلي</th>
+                            <th>المقاس</th>
+                            <th>اللون</th>
+                            <th>الكمية</th>
+                            <th>الملاحظات</th>
+                            <th>الحالة</th>
+                            <th>تحديد السعر (دج)</th>
+                            <th>إجراء</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminOrdersTable">
+                        </tbody>
+                </table>
             </div>
-
         </main>
-
     </div>
 
     <script>
-        // دالة التحكم في السايدبار التفاعلية
-        function toggleSidebar(event) {
-            event.stopPropagation(); 
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('open');
-            document.body.classList.toggle('sidebar-active');
-        }
-
-        window.addEventListener('click', function(event) {
-            const sidebar = document.getElementById('sidebar');
-            const menuToggle = document.getElementById('menuToggle');
-            
-            if (sidebar.classList.contains('open') && !sidebar.contains(event.target) && !menuToggle.contains(event.target)) {
-                sidebar.classList.remove('open');
-                document.body.classList.remove('sidebar-active');
-            }
-        });
-
-        // جلب الطلبات من السيرفر عند تحميل الصفحة فوراً
         document.addEventListener("DOMContentLoaded", function() {
             fetchOrdersForAdmin();
         });
 
         function fetchOrdersForAdmin() {
-    const tableBody = document.getElementById('adminOrdersTable');
-    tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #a29db0;">🔄 جاري جلب الطلبات الجديدة...</td></tr>`;
+            const tableBody = document.getElementById('adminOrdersTable');
+            tableBody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: #a29db0;">🔄 جاري جلب الطلبات الحية...</td></tr>`;
 
-    // استخدام الرابط الكامل للسيرفر لضمان جلب البيانات حتى لو كنتِ تشغلين اللوحة من أي مكان
-    fetch('http://localhost:5000/api/orders') 
-        .then(res => {
-            if (!res.ok) {
-                throw new Error('Network response was not ok: ' + res.statusText);
-            }
-            return res.json();
-        })
-        .then(orders => {
-            tableBody.innerHTML = ""; // تفريغ رسالة التحميل
+            fetch('http://localhost:5000/api/orders') 
+                .then(res => res.json())
+                .then(orders => {
+                    tableBody.innerHTML = ""; 
 
-            if (!orders || orders.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #a29db0;">📭 لا توجد أي طلبات مسجلة في قاعدة البيانات حالياً.</td></tr>`;
+                    if (!orders || orders.length === 0) {
+                        tableBody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: #a29db0;">📭 لا توجد أي طلبات مسجلة حالياً.</td></tr>`;
+                        return;
+                    }
+
+                    orders.forEach(order => {
+                        const priceInput = order.price && order.price > 0 
+                            ? `<span style="color: #22c55e; font-weight: bold;">${order.price} دج</span>`
+                            : `<input type="number" id="price-${order._id}" class="price-input" placeholder="أدخلي السعر">`;
+
+                        const actionButton = order.price && order.price > 0
+                            ? `<span style="color: #a29db0; font-size: 12px;">تم الحفظ ✓</span>`
+                            : `<button onclick="updateOrderPrice('${order._id}')" class="save-btn">حفظ السعر</button>`;
+
+                        const statusBadge = order.price && order.price > 0
+                            ? `<span class="status-badge" style="background-color: rgba(34, 197, 94, 0.15); color: #22c55e;">تم التسعير</span>`
+                            : `<span class="status-badge">بانتظار التسعير</span>`;
+
+                        // تم إصلاح الاختصار هنا لتفادي أخطاء الـ undefined
+                        const shortUserId = order.userId ? order.userId.substring(0, 8) + '...' : 'مجهول';
+
+                        const row = `
+                            <tr>
+                                <td style="font-family: monospace; color: #a855f7; font-weight: bold;">${shortUserId}</td>
+                                <td><a href="${order.productLink}" target="_blank" class="product-link"><i class="fas fa-external-link-alt"></i> فتح الرابط</a></td>
+                                <td>${order.size || 'N/A'}</td>
+                                <td>${order.color || 'N/A'}</td>
+                                <td style="font-weight: bold;">${order.quantity || 1}</td>
+                                <td><div class="notes-text" title="${order.notes || ''}">${order.notes || 'لا يوجد'}</div></td>
+                                <td>${statusBadge}</td>
+                                <td>${priceInput}</td>
+                                <td>${actionButton}</td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                    tableBody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: #ff3344;">❌ فشل الاتصال بالسيرفر وجلب البيانات.</td></tr>`;
+                });
+        }
+
+        function updateOrderPrice(orderId) {
+            const priceValue = document.getElementById(`price-${orderId}`).value;
+            if (!priceValue || priceValue <= 0) {
+                alert("يرجى إدخل سعر صحيح.");
                 return;
             }
 
-            // بناء الأسطر
-            orders.forEach(order => {
-                const row = `
-                    <tr>
-                        <td style="font-family: monospace; color: #a855f7; font-weight: bold;">${order.userId || 'مجهول'}</td>
-                        <td>
-                            <a href="${order.productLink}" target="_blank" class="product-link">
-                                <i class="fas fa-external-link-alt"></i> فتح الرابط
-                            </a>
-                        </td>
-                        <td>${order.size || 'N/A'}</td>
-                        <td>${order.color || 'N/A'}</td>
-                        <td style="font-weight: bold; color: #ffffff;">${order.quantity || 1}</td>
-                        <td>
-                            <div class="notes-text" title="ملاحظات الزبون">
-                                ${order.notes || '<span style="opacity: 0.4;">لا توجد ملاحظات</span>'}
-                            </div>
-                        </td>
-                        <td><span class="status-badge">بانتظار التسعير</span></td>
-                    </tr>
-                `;
-                tableBody.innerHTML += row;
-            });
-        })
-        .catch(err => {
-            console.error("Error fetching admin orders:", err);
-            tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #ff3344;">❌ فشل الاتصال بالسيرفر وجلب البيانات. تأكدي من تشغيل السيرفر على منفذ 5000</td></tr>`;
-        });
-}
-        
+            fetch(`http://localhost:5000/api/admin/orders/price/${orderId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ price: parseFloat(priceValue) })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert("✅ تم حفظ السعر بنجاح!");
+                    fetchOrdersForAdmin();
+                } else {
+                    alert("❌ خطأ: " + data.message);
+                }
+            })
+            .catch(err => alert("❌ حدث خطأ في الاتصال."));
+        }
+
+        function logout() {
+            if(confirm("هل تريد تسجيل الخروج؟")) window.location.href = 'login.html';
+        }
     </script>
 </body>
 </html>
