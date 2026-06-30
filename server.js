@@ -207,6 +207,28 @@ app.get('/api/orders', async (req, res) => {
     }
 });
 
+// مسار تحديث السعر من طرف الآدمن
+app.put('/api/admin/orders/price/:orderId', async (req, res) => {
+    try {
+        const { price } = req.body;
+        const { orderId } = req.params;
+
+        const updatedOrder = await Order.findByIdAndUpdate(
+            orderId, 
+            { price: price, status: 'Priced' }, 
+            { new: true }
+        );
+
+        if (!updatedOrder) {
+            return res.status(404).json({ success: false, message: "Order not found" });
+        }
+
+        res.status(200).json({ success: true, message: "Price updated successfully!" });
+    } catch (error) {
+        console.error("Error updating price:", error);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+});
 
 // ================= 7. Server Initialization =================
 
