@@ -298,15 +298,15 @@
                 </h5>
                 <p style="font-size: 14px; color: #e2def0; margin-bottom: 6px; display: flex; justify-content: space-between;">
                     <span>الحساب البريدي (CCP):</span> 
-                    <strong style="color: #ffffff; font-family: monospace; letter-spacing: 1px;">0023456789 / Clé 45</strong>
+                    <strong style="color: #ffffff; font-family: monospace; letter-spacing: 1px;">0042972816 / Clé 93</strong>
                 </p>
                 <p style="font-size: 14px; color: #e2def0; margin-bottom: 6px; display: flex; justify-content: space-between;">
                     <span>الحساب الجاري (RIP BaridiMob):</span> 
-                    <strong style="color: #ffffff; font-family: monospace; letter-spacing: 1px;">00799999002345678922</strong>
+                    <strong style="color: #ffffff; font-family: monospace; letter-spacing: 1px;">00799999004297281693</strong>
                 </p>
                 <p style="font-size: 14px; color: #e2def0; display: flex; justify-content: space-between;">
                     <span>الاسم واللقب الكامل:</span> 
-                    <strong style="color: #ffffff;">دوكار مريم</strong>
+                    <strong style="color: #ffffff;">Mariem Dokkar</strong>
                 </p>
             </div>
             
@@ -321,22 +321,22 @@
                 <div class="form-grid-layout">
                     <div class="form-input-box">
                         <label>الاسم الشخصي</label>
-                        <input type="text" id="shippingName" required placeholder="مثال: مريم">
+                        <input type="text" id="shippingName" required placeholder="مثال: لينا">
                     </div>
                     
                     <div class="form-input-box">
                         <label>اللقب (اسم العائلة)</label>
-                        <input type="text" id="shippingLastName" required placeholder="مثال: دوكار">
+                        <input type="text" id="shippingLastName" required placeholder="مثال: رامي">
                     </div>
 
                     <div class="form-input-box">
                         <label>رقم الهاتف</label>
-                        <input type="tel" id="shippingPhone" required placeholder="05XXXXXXXX" style="text-align: right;">
+                        <input type="tel" id="shippingPhone" required placeholder="+213XXXXXXXX" style="text-align: right;">
                     </div>
 
                     <div class="form-input-box">
                         <label>الرمز البريدي</label>
-                        <input type="text" id="shippingZip" required placeholder="30000" style="text-align: right;">
+                        <input type="text" id="shippingZip" required placeholder="xxxxx" style="text-align: right;">
                     </div>
 
                     <div class="form-input-box full-width">
@@ -462,7 +462,7 @@
             .then(res => res.json())
             .then(data => {
                 if(data.success) {
-                    alert('✅ تم إرسال بيانات الشحن وإثبات وصل الدفع بنجاح لمراجعته من الإدارة!');
+                    alert('✅ لمراجعته من الإدارة!');
                     hidePaymentSection();
                     location.reload(); 
                 } else {
@@ -470,7 +470,7 @@
                 }
             })
             .catch(err => {
-                console.error('Checkout Error:', err);
+                console.error('Checkouتم إرسال بيانات الشحن وإثبات وصل الدفع بنجاح t Error:', err);
                 alert('❌ حدث خطأ أثناء الاتصال بالسيرفر لإرسال الملف والبيانات.');
             });
         }
