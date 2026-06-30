@@ -5,244 +5,247 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>طلباتي - منصة الوساطة</title>
     <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
 
-body {
-    background: radial-gradient(circle at 30% 20%, #2e1a47 0%, #120721 100%);
-    color: #ffffff;
-    min-height: 100vh;
-    padding: 40px 20px;
-}
+        body {
+            background: radial-gradient(circle at 30% 20%, #2e1a47 0%, #120721 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
 
-.orders-page-container {
-    max-width: 1050px;
-    margin: 0 auto;
-}
+        .orders-page-container {
+            max-width: 1050px;
+            margin: 0 auto;
+        }
 
-.orders-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding-bottom: 20px;
-    margin-bottom: 30px;
-}
+        .orders-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
 
-.header-titles h2 {
-    font-size: 24px;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 5px;
-}
+        .header-titles h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
 
-.purple-light-text {
-    color: #a855f7;
-}
+        .purple-light-text {
+            color: #a855f7;
+        }
 
-.subtitle {
-    font-size: 14px;
-    color: #a29db0;
-}
+        .subtitle {
+            font-size: 14px;
+            color: #a29db0;
+        }
 
-.btn-back-dashboard {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 14.5px;
-    font-weight: 600;
-    padding: 10px 18px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    background-color: rgba(255, 255, 255, 0.03);
-    border-radius: 8px;
-    transition: all 0.2s ease;
-}
+        .btn-back-dashboard {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14.5px;
+            font-weight: 600;
+            padding: 10px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
 
-.btn-back-dashboard:hover {
-    background-color: rgba(168, 85, 247, 0.2);
-    border-color: #a855f7;
-}
+        .btn-back-dashboard:hover {
+            background-color: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+        }
 
-.table-card-wrapper {
-    background-color: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    overflow-x: auto;
-    margin-bottom: 35px;
-}
+        .table-card-wrapper {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            overflow-x: auto;
+            margin-bottom: 35px;
+        }
 
-.static-orders-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: right;
-}
+        .static-orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+        }
 
-.static-orders-table th {
-    background-color: rgba(168, 85, 247, 0.1);
-    color: #e2def0;
-    padding: 16px 20px;
-    font-size: 14px;
-    font-weight: 700;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.08);
-}
+        .static-orders-table th {
+            background-color: rgba(168, 85, 247, 0.1);
+            color: #e2def0;
+            padding: 16px 20px;
+            font-size: 14px;
+            font-weight: 700;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+        }
 
-.static-orders-table td {
-    padding: 16px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    font-size: 14.5px;
-}
+        .static-orders-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 14.5px;
+        }
 
-.product-link-table {
-    color: #a855f7;
-    text-decoration: none;
-    font-weight: 600;
-}
-.product-link-table:hover { text-decoration: underline; }
+        .product-link-table {
+            color: #a855f7;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .product-link-table:hover { text-decoration: underline; }
 
-/* ملصقات الحالات الملونة وفخمة */
-.status-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
-}
-.status-pending { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
-.status-priced { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; }
-.status-completed { background-color: rgba(34, 197, 94, 0.15); color: #22c55e; }
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .status-pending { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+        .status-priced { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; }
+        .status-completed { background-color: rgba(34, 197, 94, 0.15); color: #22c55e; }
 
-/* أزرار الإجراءات */
-.btn-action-pay {
-    background-color: #22c55e;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 13px;
-}
-.btn-action-pay:hover { background-color: #16a34a; }
+        .btn-action-pay {
+            background-color: #22c55e;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .btn-action-pay:hover { background-color: #16a34a; }
 
-.empty-table-message {
-    padding: 60px 20px !important;
-    text-align: center;
-    color: #a29db0;
-}
+        .empty-table-message {
+            padding: 60px 20px !important;
+            text-align: center;
+            color: #a29db0;
+        }
 
-.empty-table-message i {
-    font-size: 40px;
-    color: rgba(255, 255, 255, 0.1);
-    margin-bottom: 15px;
-}
+        .empty-table-message i {
+            font-size: 40px;
+            color: rgba(255, 255, 255, 0.1);
+            margin-bottom: 15px;
+        }
 
-.empty-table-message p {
-    font-size: 15px;
-    font-weight: 500;
-}
+        .empty-table-message p {
+            font-size: 15px;
+            font-weight: 500;
+        }
 
-.payment-static-section {
-    background-color: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-top: 4px solid #a855f7;
-    border-radius: 12px;
-    padding: 30px;
-    display: none;
-}
+        .payment-static-section {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 4px solid #a855f7;
+            border-radius: 12px;
+            padding: 30px;
+            display: none;
+        }
 
-.payment-static-section.active-box {
-    display: block;
-}
+        .payment-static-section.active-box {
+            display: block;
+        }
 
-.payment-section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    padding-bottom: 15px;
-    margin-bottom: 20px;
-}
+        .payment-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
 
-.payment-section-header h3 {
-    font-size: 16px;
-    color: #ffffff;
-    font-weight: 700;
-}
+        .payment-section-header h3 {
+            font-size: 16px;
+            color: #ffffff;
+            font-weight: 700;
+        }
 
-.btn-cancel-payment {
-    background: none;
-    border: none;
-    color: #a29db0;
-    font-size: 20px;
-    cursor: pointer;
-}
-.btn-cancel-payment:hover { color: #ff3344; }
+        .btn-cancel-payment {
+            background: none;
+            border: none;
+            color: #a29db0;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .btn-cancel-payment:hover { color: #ff3344; }
 
-.payment-total-alert {
-    background-color: rgba(168, 85, 247, 0.15);
-    color: #ffffff;
-    border: 1px dashed rgba(168, 85, 247, 0.3);
-    padding: 14px;
-    border-radius: 8px;
-    text-align: center;
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 25px;
-}
+        .payment-total-alert {
+            background-color: rgba(168, 85, 247, 0.15);
+            color: #ffffff;
+            border: 1px dashed rgba(168, 85, 247, 0.3);
+            padding: 14px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
 
-.form-grid-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 25px;
-}
+        .form-grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
 
-.form-input-box { display: flex; flex-direction: column; }
-.form-input-box.full-width { grid-column: 1 / -1; }
+        .form-input-box { display: flex; flex-direction: column; }
+        .form-input-box.full-width { grid-column: 1 / -1; }
 
-.form-input-box label {
-    font-size: 13px;
-    font-weight: 600;
-    color: #e2def0;
-    margin-bottom: 8px;
-}
+        .form-input-box label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #e2def0;
+            margin-bottom: 8px;
+        }
 
-.form-input-box input {
-    padding: 12px 14px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    font-size: 14px;
-    color: #ffffff;
-    text-align: right;
-}
+        .form-input-box input {
+            padding: 12px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            font-size: 14px;
+            color: #ffffff;
+            text-align: right;
+        }
 
-.form-input-box input:focus {
-    outline: none;
-    border-color: #a855f7;
-}
+        .form-input-box input:focus {
+            outline: none;
+            border-color: #a855f7;
+        }
 
-.btn-submit-shipping-final {
-    width: 100%;
-    padding: 15px;
-    background-color: #a855f7;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 15.5px;
-    font-weight: 600;
-    cursor: pointer;
-}
-.btn-submit-shipping-final:hover { background-color: #9333ea; }
+        .btn-submit-shipping-final {
+            width: 100%;
+            padding: 15px;
+            background-color: #a855f7;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 15.5px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-submit-shipping-final:hover { background-color: #9333ea; }
 
-@media (max-width: 600px) {
-    .form-grid-layout { grid-template-columns: 1fr; }
-    .orders-header { flex-direction: column; align-items: flex-start; gap: 15px; }
-    .btn-back-dashboard { width: 100%; text-align: center; }
-}</style>
+        @media (max-width: 600px) {
+            .form-grid-layout { grid-template-columns: 1fr; }
+            .orders-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .btn-back-dashboard { width: 100%; text-align: center; }
+        }
+    </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -271,30 +274,50 @@ body {
                     </tr>
                 </thead>
                 <tbody id="ordersTableBody">
-                    
                     <tr id="noOrdersRow">
                         <td colspan="5" class="empty-table-message">
                             <i class="fas fa-folder-open"></i>
                             <p>لا توجد لديك أي طلبات حالياً. يمكنك إضافة طلب جديد من لوحة التحكم.</p>
                         </td>
                     </tr>
-
                 </tbody>
             </table>
         </div>
 
+        <!-- صندوق التوصيل وإدخال بيانات الدفع والوصل المدمج المصحح -->
         <div class="payment-static-section" id="paymentSection">
             <div class="payment-section-header">
-                <h3><i class="fas fa-truck"></i> معلومات الشحن والدفع للطلب</h3>
+                <h3><i class="fas fa-shipping-fast purple-light-text"></i> معلومات الشحن والدفع للطلب</h3>
                 <button class="btn-cancel-payment" onclick="hidePaymentSection()">&times;</button>
+            </div>
+
+            <!-- معلومات حساب المشرف المعتمد بريدي موب / CCP -->
+            <div class="admin-payment-info" style="background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.2); padding: 20px; border-radius: 12px; margin-bottom: 20px; border-right: 4px solid #a855f7;">
+                <h5 style="color: #a855f7; margin-bottom: 12px; font-size: 15px; font-weight: 700;">
+                    <i class="fas fa-university"></i> بيانات الدفع المعتمدة (CCP / BaridiMob):
+                </h5>
+                <p style="font-size: 14px; color: #e2def0; margin-bottom: 6px; display: flex; justify-content: space-between;">
+                    <span>الحساب البريدي (CCP):</span> 
+                    <strong style="color: #ffffff; font-family: monospace; letter-spacing: 1px;">0023456789 / Clé 45</strong>
+                </p>
+                <p style="font-size: 14px; color: #e2def0; margin-bottom: 6px; display: flex; justify-content: space-between;">
+                    <span>الحساب الجاري (RIP BaridiMob):</span> 
+                    <strong style="color: #ffffff; font-family: monospace; letter-spacing: 1px;">00799999002345678922</strong>
+                </p>
+                <p style="font-size: 14px; color: #e2def0; display: flex; justify-content: space-between;">
+                    <span>الاسم واللقب الكامل:</span> 
+                    <strong style="color: #ffffff;">دوكار مريم</strong>
+                </p>
             </div>
             
             <div class="payment-total-alert">
                 المبلغ الإجمالي المطلوب سداده: <strong id="priceDisplay">0 دج</strong>
             </div>
 
-            <form id="shippingForm" onsubmit="handleFormSubmit(event)">
+            <!-- استمارة الشحن مع ميزة رفع الوصل enctype="multipart/form-data" -->
+            <form id="shippingForm" enctype="multipart/form-data" onsubmit="handleFormSubmit(event)">
                 <input type="hidden" id="currentOrderId">
+                
                 <div class="form-grid-layout">
                     <div class="form-input-box">
                         <label>الاسم الشخصي</label>
@@ -308,17 +331,32 @@ body {
 
                     <div class="form-input-box">
                         <label>رقم الهاتف</label>
-                        <input type="tel" id="shippingPhone" required placeholder="05XXXXXXXX">
+                        <input type="tel" id="shippingPhone" required placeholder="05XXXXXXXX" style="text-align: right;">
                     </div>
 
                     <div class="form-input-box">
                         <label>الرمز البريدي</label>
-                        <input type="text" id="shippingZip" required placeholder="30000">
+                        <input type="text" id="shippingZip" required placeholder="30000" style="text-align: right;">
                     </div>
 
                     <div class="form-input-box full-width">
                         <label>العنوان الشخصي والكامل للتوصيل</label>
-                        <input type="text" id="shippingAddress" required placeholder="اكتب عنوانك بدقة متناهية لضمان وصول السلعة">
+                        <input type="text" id="shippingAddress" required placeholder="اكتبي عنوانك بدقة متناهية لضمان وصول السلعة">
+                    </div>
+                </div>
+
+                <!-- مساحة رفع الوصل الأنيقة المدمجة بشكل سليم داخل الـ Form -->
+                <div class="receipt-upload-section" style="margin-bottom: 25px; display: flex; flex-direction: column; gap: 8px;">
+                    <label style="font-size: 13px; color: #e2def0; font-weight: 600;">
+                        <i class="fas fa-paperclip"></i> إرفاق صورة صك الدفع أو الوصل (Image / PDF):
+                    </label>
+                    <div class="upload-dropzone" style="border: 2px dashed rgba(168, 85, 247, 0.4); padding: 25px; border-radius: 12px; text-align: center; background: rgba(0,0,0,0.2); position: relative; cursor: pointer; transition: background 0.2s;">
+                        <input type="file" id="receiptFile" name="receipt" accept="image/*, application/pdf" required style="position: absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer;" onchange="updateFileName(this)">
+                        <div id="uploadTriggerContent">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 30px; color: #a855f7; margin-bottom: 10px;"></i>
+                            <p style="font-size: 13px; color: #e2def0;" id="filePlaceholder">اسحبي صورة الوصل إلى هنا أو انقري للتصفح</p>
+                            <span style="font-size: 11px; color: #a29db0;">صيغ مدعومة: JPG, PNG, PDF (الحد الأقصى 5 ميجا)</span>
+                        </div>
                     </div>
                 </div>
                 
@@ -332,47 +370,46 @@ body {
 
     <script>
         const userId = localStorage.getItem('userId');
-            // جلب الطلبات الخاصة بالمستخدم
-            fetch(`/api/orders/user/${userId}`)
-                .then(res => res.json())
-                .then(orders => {
-                    const tbody = document.getElementById('ordersTableBody');
-                    
-                    if (orders && orders.length > 0) {
-                        tbody.innerHTML = ''; // إزالة رسالة "لا توجد طلبات"
-                        
-                        orders.forEach(order => {
-                            // تخصيص تسميات الحالات والألوان وفخامتها
-                            let statusClass = 'status-pending';
-                            let statusText = order.status || 'قيد الانتظار';
-                            let actionButton = '<span style="color:#a29db0; font-size:12px;">بانتظار التسعير</span>';
-
-                            if(order.status === 'Priced' || order.status === 'تم التسعير') {
-                                statusClass = 'status-priced';
-                                statusText = 'تم التسعير';
-                                actionButton = `<button class="btn-action-pay" onclick="showPaymentSection('${order._id}', '${order.price || 0}')">إتمام الدفع</button>`;
-                            } else if (order.status === 'Completed' || order.status === 'تم الشحن') {
-                                statusClass = 'status-completed';
-                                statusText = 'تم الشحن والطلب مكتمل';
-                                actionButton = '<span style="color:#22c55e; font-size:12px;"><i class="fas fa-check"></i> مكتمل</span>';
-                            }
-
-                            tbody.innerHTML += `
-                                <tr>
-                                    <td><a class="product-link-table" href="${order.productLink}" target="_blank">معاينة الرابط الخاص بالمنتج <i class="fas fa-external-link-alt"></i></a></td>
-                                    <td><strong>${order.quantity}</strong></td>
-                                    <td><span style="color: #22c55e; font-weight:700;">${order.price ? order.price + ' دج' : 'لم يُسعر بعد'}</span></td>
-                                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                                    <td>${actionButton}</td>
-                                </tr>
-                            `;
-                        });
-                    }
-                })
-                .catch(err => {
-                    console.error('Error fetching orders:', err);
-                });
         
+        // جلب الطلبات الخاصة بالمستخدم عند التحميل
+        fetch(`/api/orders/user/${userId}`)
+            .then(res => res.json())
+            .then(orders => {
+                const tbody = document.getElementById('ordersTableBody');
+                
+                if (orders && orders.length > 0) {
+                    tbody.innerHTML = ''; // تفريغ رسالة "لا توجد طلبات"
+                    
+                    orders.forEach(order => {
+                        let statusClass = 'status-pending';
+                        let statusText = order.status || 'قيد الانتظار';
+                        let actionButton = '<span style="color:#a29db0; font-size:12px;">بانتظار التسعير</span>';
+
+                        if(order.status === 'Priced' || order.status === 'تم التسعير') {
+                            statusClass = 'status-priced';
+                            statusText = 'تم التسعير';
+                            actionButton = `<button class="btn-action-pay" onclick="showPaymentSection('${order._id}', '${order.price || 0}')">إتمام الدفع</button>`;
+                        } else if (order.status === 'Completed' || order.status === 'تم الشحن') {
+                            statusClass = 'status-completed';
+                            statusText = 'تم الشحن والطلب مكتمل';
+                            actionButton = '<span style="color:#22c55e; font-size:12px;"><i class="fas fa-check"></i> مكتمل</span>';
+                        }
+
+                        tbody.innerHTML += `
+                            <tr>
+                                <td><a class="product-link-table" href="${order.productLink}" target="_blank">معاينة الرابط الخاص بالمنتج <i class="fas fa-external-link-alt"></i></a></td>
+                                <td><strong>${order.quantity}</strong></td>
+                                <td><span style="color: #22c55e; font-weight:700;">${order.price ? order.price + ' دج' : 'لم يُسعر بعد'}</span></td>
+                                <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                                <td>${actionButton}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            })
+            .catch(err => {
+                console.error('Error fetching orders:', err);
+            });
 
         // دالة إظهار صندوق الدفع
         function showPaymentSection(orderId, price) {
@@ -387,45 +424,56 @@ body {
             document.getElementById('paymentSection').classList.remove('active-box');
         }
 
-        // دالة معالجة إرسال الفورم (الدفع والشحن)
-        function handleFormSubmit(event) {
-    event.preventDefault();
-    
-    const orderId = document.getElementById('currentOrderId').value;
-    
-    // تجميع البيانات من المدخلات
-    const formData = {
-        firstName: document.getElementById('shippingName').value,
-        lastName: document.getElementById('shippingLastName').value,
-        phone: document.getElementById('shippingPhone').value,
-        wilaya: 'الولاية الافتراضية', // يمكنكِ إضافة حقل ولاية في الـ HTML لاحقاً
-        address: document.getElementById('shippingAddress').value,
-        zipCode: document.getElementById('shippingZip').value
-    };
-
-    // إرسال البيانات إلى السيرفر
-    fetch(`/api/orders/checkout/${orderId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-    })
-    .then(res => res.json())
-    .then(data => {
-        if(data.success) {
-            alert('✅ تم إرسال بيانات الشحن والدفع بنجاح! السيرفر يستقبلها الآن.');
-            hidePaymentSection();
-            location.reload(); // إعادة تحميل الصفحة لتحديث الحالة إلى "Verifying Payment"
-        } else {
-            alert('❌ فشل إرسال البيانات: ' + data.message);
+        // وظيفة تحديث المسمى التوضيحي عند اختيار ملف الوصل
+        function updateFileName(input) {
+            const placeholder = document.getElementById('filePlaceholder');
+            if (input.files && input.files[0]) {
+                placeholder.innerHTML = `📄 تم اختيار: <strong style="color: #22c55e;">${input.files[0].name}</strong>`;
+            } else {
+                placeholder.innerText = "اسحبي صورة الوصل إلى هنا أو انقري للتصفح";
+            }
         }
-    })
-    .catch(err => {
-        console.error('Checkout Error:', err);
-        alert('❌ حدث خطأ أثناء الاتصال بالسيرفر.');
-    });
-}
+
+        // دالة معالجة إرسال الفورم بواسطة FormData لدعم رفع الملفات للسيرفر
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const orderId = document.getElementById('currentOrderId').value;
+            const fileInput = document.getElementById('receiptFile');
+            
+            // بما أننا نرسل ملفًا (صورة الوصل)، نستخدم FormData بدلاً من JSON الطياري
+            const formData = new FormData();
+            formData.append('firstName', document.getElementById('shippingName').value);
+            formData.append('lastName', document.getElementById('shippingLastName').value);
+            formData.append('phone', document.getElementById('shippingPhone').value);
+            formData.append('wilaya', 'الولاية الافتراضية'); 
+            formData.append('address', document.getElementById('shippingAddress').value);
+            formData.append('zipCode', document.getElementById('shippingZip').value);
+            
+            if (fileInput.files[0]) {
+                formData.append('receipt', fileInput.files[0]); // إرفاق الملف تحت مفتاح 'receipt' ليتعامل معه Multer في السيرفر
+            }
+
+            // إرسال البيانات والملف إلى السيرفر
+            fetch(`/api/orders/checkout/${orderId}`, {
+                method: 'POST',
+                body: formData // يتم إرسال FormData مباشرة بدون Headers لتفادي تخريب الـ Boundary الخاص بالملفات
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    alert('✅ تم إرسال بيانات الشحن وإثبات وصل الدفع بنجاح لمراجعته من الإدارة!');
+                    hidePaymentSection();
+                    location.reload(); 
+                } else {
+                    alert('❌ فشل إرسال البيانات: ' + data.message);
+                }
+            })
+            .catch(err => {
+                console.error('Checkout Error:', err);
+                alert('❌ حدث خطأ أثناء الاتصال بالسيرفر لإرسال الملف والبيانات.');
+            });
+        }
     </script>
 </body>
 </html>
