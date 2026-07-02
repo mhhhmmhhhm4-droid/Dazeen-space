@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقعي الشخصي</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">موقعي</div>
+        <nav>
+            <a href="#">الرئيسية</a>
+            <a href="#about">من أنا</a>
+            <a href="#projects">أعمالي</a>
+            <a href="#contact">تواصل</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>أهلاً بك في موقعي الشخصي</h1>
+        <p>أنا مطورة واجهات أمامية أهوى البرمجة والتصميم 💻🎨</p>
+    </section>
+
+    <main>
+        <div class="container" id="about">
+            <div class="about-section">
+                <h3 class="section-title">من أنا؟</h3>
+                <p>اسمي مريم ذكار، أدرس تطوير الويب وأحب تعلم التقنيات الجديدة. أعمل على مشاريع متنوعة باستخدام HTML، CSS و JavaScript.</p>
+            </div>
+
+            <div id="projects">
+                <h3 class="section-title">أعمالي</h3>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <h4>مشروع موقع مطعم</h4>
+                        <p>موقع احترافي لمطعم مع قائمة طعام وتصميم جذاب.</p>
+                    </div>
+                    <div class="project-card">
+                        <h4>صفحة تسجيل دخول</h4>
+                        <p>واجهة تسجيل دخول بسيطة وتفاعلية باستخدام HTML و CSS.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container contact-section" id="contact">
+            <h3 class="section-title">تواصل معي</h3>
+            <form onsubmit="event.preventDefault();">
+                <div class="form-group">
+                    <input type="text" placeholder="اسمك" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="بريدك الإلكتروني" required>
+                </div>
+                <div class="form-group">
+                    <textarea placeholder="رسالتك" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">إرسال</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 - جميع الحقوق محفوظة</p>
+    </footer>
+
+</body>
+</html>

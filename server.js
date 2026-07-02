@@ -25,6 +25,14 @@ mongoose.connect(process.env.MONGO_URI, { connectTimeoutMS: 15000 })
 .then(() => console.log('✅ MongoDB connected successfully to Atlas Cloud via secured .env file!'))
 .catch(err => console.error('❌ Database connection error. Check your .env path or Atlas IP Whitelist:', err));
 
+const fs = require('fs');
+
+// التأكد من إنشاء مجلد uploads تلقائياً على سيرفر راندر عند التشغيل
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)){
+    fs.mkdirSync(uploadDir, { recursive: true });
+    console.log('📁 Created uploads folder automatically on Render!');
+}
 // ================= 3. Multer Setup for Receipt Uploads =================
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -242,4 +250,4 @@ app.put('/api/admin/orders/price/:orderId', async (req, res) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`🚀 Server is running and protected on: http://localhost:${PORT}`);
-});
+})
